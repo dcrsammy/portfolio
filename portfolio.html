@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Akomolafe Olawale — Developer & Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #080810;
+      --surface:   #0e0e1a;
+      --border:    #1e1e30;
+      --gold:      #c9a84c;
+      --gold-dim:  #7a6230;
+      --text:      #e8e8f0;
+      --muted:     #666680;
+      --accent:    #ff3366;
+      --mono:      'Space Mono', monospace;
+      --sans:      'Space Grotesk', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 2.5rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(8,8,16,0.85);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-mark {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--gold);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 8rem 2.5rem 5rem;
+      overflow: hidden;
+    }
+
+    .hero-grid-lines {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, var(--border) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.3;
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: -200px; right: -200px;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-name {
+      font-size: clamp(3.5rem, 10vw, 8rem);
+      font-weight: 700;
+      line-height: 0.9;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      position: relative;
+    }
+
+    .hero-name span {
+      color: var(--gold);
+    }
+
+    .hero-role {
+      margin-top: 2rem;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      max-width: 520px;
+      line-height: 1.8;
+    }
+
+    .hero-cta {
+      margin-top: 3rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.75rem;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--bg);
+      font-weight: 700;
+    }
+
+    .btn-primary:hover {
+      background: #e0b85a;
+    }
+
+    .btn-ghost {
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--gold-dim);
+      color: var(--gold);
+    }
+
+    /* ── SECTION BASE ── */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 6rem 2.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--accent);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 3rem;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .about-bio {
+      color: var(--muted);
+      line-height: 1.9;
+    }
+
+    .about-bio p + p { margin-top: 1rem; }
+
+    .about-bio strong { color: var(--text); }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .stat-box {
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      border-radius: 2px;
+      background: var(--surface);
+    }
+
+    .stat-number {
+      font-family: var(--mono);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.4rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── STACK ── */
+    .stack-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .stack-tag {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 0.6rem 1rem;
+      border-radius: 2px;
+      background: var(--surface);
+      letter-spacing: 0.06em;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .stack-tag:hover {
+      border-color: var(--gold-dim);
+      color: var(--gold);
+    }
+
+    /* ── PROJECTS ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      padding: 2rem;
+      border-radius: 2px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .project-card:hover { border-color: var(--gold-dim); }
+    .project-card:hover::before { transform: scaleX(1); }
+
+    .project-card.featured {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .project-tag {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .project-name {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.01em;
+    }
+
+    .project-desc {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.75;
+    }
+
+    .project-stack {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .project-stack span {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--gold-dim);
+      border: 1px solid var(--gold-dim);
+      padding: 0.25rem 0.6rem;
+      border-radius: 2px;
+      letter-spacing: 0.08em;
+    }
+
+    .project-links {
+      margin-top: 1.5rem;
+      display: flex;
+      gap: 1rem;
+    }
+
+    .project-links a {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .project-links a:hover { color: var(--gold); }
+
+    .featured-meta {
+      border-left: 1px solid var(--border);
+      padding-left: 2rem;
+    }
+
+    .featured-status {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--gold);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .featured-status::before {
+      content: '';
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .featured-detail {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .featured-detail li {
+      list-style: none;
+      padding-left: 1rem;
+      position: relative;
+    }
+
+    .featured-detail li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--gold-dim);
+    }
+
+    .featured-detail li + li { margin-top: 0.4rem; }
+
+    /* ── CONTACT ── */
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-intro {
+      color: var(--muted);
+      line-height: 1.9;
+      font-size: 1rem;
+    }
+
+    .contact-intro strong { color: var(--text); }
+
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 1.5rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: 2px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .contact-link:hover {
+      border-color: var(--gold-dim);
+    }
+
+    .contact-link-name {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .contact-link-value {
+      font-size: 0.85rem;
+      color: var(--text);
+    }
+
+    .contact-link:hover .contact-link-name { color: var(--gold); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-mark {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+
+    .footer-mark span { color: var(--gold); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { gap: 1rem; }
+      section { padding: 4rem 1.5rem; }
+      #hero { padding: 7rem 1.5rem 4rem; }
+      .about-grid,
+      .projects-grid,
+      .project-card.featured,
+      .contact-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .featured-meta { border-left: none; border-top: 1px solid var(--border); padding-left: 0; padding-top: 1.5rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-mark">AO_DEV</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#stack">Stack</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div id="hero">
+    <div class="hero-grid-lines"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-label">Lagos, Nigeria — Full-Stack Developer</div>
+    <h1 class="hero-name">Akomolafe<br /><span>Olawale</span></h1>
+    <p class="hero-role">
+      I build products people actually use — from backend APIs and mobile apps<br />
+      to platforms, brands, and the infrastructure between them.
+    </p>
+    <div class="hero-cta">
+      <a href="#work" class="btn btn-primary">View Work</a>
+      <a href="#contact" class="btn btn-ghost">Get In Touch</a>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-label">Background</div>
+    <h2 class="section-title">Builder. Designer. Founder.</h2>
+    <div class="about-grid">
+      <div class="about-bio">
+        <p>I'm a Lagos-based full-stack developer with a bias for execution. I've shipped production-grade platforms, built and deployed e-commerce systems, and handled everything from database migrations to brand identity — sometimes on the same project.</p>
+        <p>Before Lagos, I was based in China — retained developer for <strong>Oriflame Trading Company</strong> and <strong>Eternal Energy Trading Company</strong>, and a student at Sanming University and Nanjing University of Technology. That time sharpened a particular interest: the gap between what Nigerian consumers need and what currently exists for them.</p>
+        <p>Most of my work now lives at that intersection — tech platforms built for the Nigerian market, with the quality bar of anywhere else.</p>
+      </div>
+      <div class="about-stats">
+        <div class="stat-box">
+          <div class="stat-number">5+</div>
+          <div class="stat-label">Production deployments</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number">3</div>
+          <div class="stat-label">Active ventures</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number">NG</div>
+          <div class="stat-label">Market focus</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number">∞</div>
+          <div class="stat-label">Shipping velocity</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- STACK -->
+  <section id="stack">
+    <div class="section-label">Technical</div>
+    <h2 class="section-title">What I Work With</h2>
+    <div class="stack-grid">
+      <div class="stack-tag">React Native</div>
+      <div class="stack-tag">Expo</div>
+      <div class="stack-tag">Node.js</div>
+      <div class="stack-tag">Express</div>
+      <div class="stack-tag">PostgreSQL</div>
+      <div class="stack-tag">Supabase</div>
+      <div class="stack-tag">Firebase</div>
+      <div class="stack-tag">Railway</div>
+      <div class="stack-tag">Netlify</div>
+      <div class="stack-tag">Cloudinary</div>
+      <div class="stack-tag">Paystack</div>
+      <div class="stack-tag">Resend</div>
+      <div class="stack-tag">HTML / CSS</div>
+      <div class="stack-tag">JavaScript</div>
+      <div class="stack-tag">REST APIs</div>
+      <div class="stack-tag">Git / GitHub</div>
+      <div class="stack-tag">FCM Push</div>
+      <div class="stack-tag">WhatsApp API</div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- WORK -->
+  <section id="work">
+    <div class="section-label">Selected Projects</div>
+    <h2 class="section-title">What I've Built</h2>
+    <div class="projects-grid">
+
+      <!-- FEATURED: CityPulse -->
+      <div class="project-card featured">
+        <div>
+          <div class="project-tag">Flagship — In Progress</div>
+          <div class="project-name">CityPulse NG</div>
+          <p class="project-desc">A full-stack urban discovery and booking platform for Lagos, Abuja, and Port Harcourt. Restaurants, events, hotels, and nightlife — built for Nigerian Gen Z and the diaspora. The platform closest to a Meituan-style local commerce layer Nigeria doesn't have yet.</p>
+          <div class="project-stack">
+            <span>React Native</span>
+            <span>Expo</span>
+            <span>Node.js</span>
+            <span>PostgreSQL</span>
+            <span>Railway</span>
+            <span>Firebase</span>
+            <span>Cloudinary</span>
+            <span>Resend</span>
+          </div>
+          <div class="project-links">
+            <a href="https://city-pulse.live" target="_blank">city-pulse.live →</a>
+          </div>
+        </div>
+        <div class="featured-meta">
+          <div class="featured-status">Live — Building</div>
+          <ul class="featured-detail">
+            <li>Backend on Railway (Node/Express/PostgreSQL)</li>
+            <li>React Native mobile app with OTA updates</li>
+            <li>FCM V1 push notifications via Expo</li>
+            <li>Cloudinary image handling in real-time chat</li>
+            <li>Vendor dashboard and admin panel</li>
+            <li>Email verification via branded Resend templates</li>
+            <li>Waitlist system with full DB integration</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Nostalgic Ambition -->
+      <div class="project-card">
+        <div class="project-tag">E-Commerce</div>
+        <div class="project-name">Nostalgic Ambition</div>
+        <p class="project-desc">Drop-model e-commerce site for a Lagos streetwear brand. Password-gated drops, timed releases, polaroid product grid, Paystack checkout with async callback handling, order tracking, and an admin panel. Corteiz/Denim Tears in spirit, built from scratch.</p>
+        <div class="project-stack">
+          <span>Netlify</span>
+          <span>Supabase</span>
+          <span>Paystack</span>
+          <span>Resend</span>
+          <span>Cloudinary</span>
+        </div>
+        <div class="project-links">
+          <a href="https://nostalgicambition.com" target="_blank">nostalgicambition.com →</a>
+        </div>
+      </div>
+
+      <!-- Afro Steeze -->
+      <div class="project-card">
+        <div class="project-tag">Client — E-Commerce</div>
+        <div class="project-name">Afro Steeze</div>
+        <p class="project-desc">Full custom e-commerce site for a Nigerian fashion brand — Netlify, JSONBin, Cloudinary, Paystack. Fixed URL stability issues and the standard async Paystack callback edge case that breaks most Nigerian payment integrations.</p>
+        <div class="project-stack">
+          <span>Netlify</span>
+          <span>JSONBin</span>
+          <span>Cloudinary</span>
+          <span>Paystack</span>
+        </div>
+        <div class="project-links">
+          <a href="https://afrosteeeze.com" target="_blank">afrosteeeze.com →</a>
+        </div>
+      </div>
+
+      <!-- Sadora -->
+      <div class="project-card">
+        <div class="project-tag">Client — Landing Page</div>
+        <div class="project-name">Sadora Beauty Hub</div>
+        <p class="project-desc">Single-page luxury landing page for a women-only beauty studio in Ajah, Lagos. Six single services, six combo packages, WhatsApp booking integration, full mobile responsiveness. Delivered as a standalone HTML file.</p>
+        <div class="project-stack">
+          <span>HTML</span>
+          <span>CSS</span>
+          <span>JavaScript</span>
+          <span>Netlify</span>
+        </div>
+      </div>
+
+      <!-- Mayree -->
+      <div class="project-card">
+        <div class="project-tag">Brand — Pre-Launch</div>
+        <div class="project-name">Mayree</div>
+        <p class="project-desc">Lagos-based luxury handbag brand built around sourced one-of-one artisan pieces and original Mayree designs. Brand identity, packaging, positioning, and digital presence — built from the ground up ahead of the first drop.</p>
+        <div class="project-stack">
+          <span>HTML</span>
+          <span>Supabase</span>
+          <span>Paystack</span>
+          <span>Netlify</span>
+        </div>
+        <div class="project-links">
+          <a href="https://mayree.co" target="_blank">mayree.co →</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-label">Let's Talk</div>
+    <h2 class="section-title">Get In Touch</h2>
+    <div class="contact-inner">
+      <div class="contact-intro">
+        <p>I'm open to <strong>freelance projects</strong>, <strong>retained development roles</strong>, and conversations about what's being built in the Nigerian tech space.</p>
+        <p style="margin-top: 1rem;">If you have a product that needs to be built right — not outsourced and forgotten — reach out.</p>
+      </div>
+      <div class="contact-links">
+        <a href="mailto:hello@dcrjnr.com" class="contact-link">
+          <span class="contact-link-name">Email</span>
+          <span class="contact-link-value">hello@dcrjnr.com</span>
+        </a>
+        <a href="https://github.com/dcrsammy" target="_blank" class="contact-link">
+          <span class="contact-link-name">GitHub</span>
+          <span class="contact-link-value">github.com/dcrsammy</span>
+        </a>
+        <a href="https://instagram.com/olawale_212" target="_blank" class="contact-link">
+          <span class="contact-link-name">Instagram</span>
+          <span class="contact-link-value">@olawale_212</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-mark">Akomolafe Olawale — <span>Lagos, NG</span></div>
+    <div class="footer-mark" style="color: #333348; font-size: 0.6rem;">Built with intent. No template.</div>
+  </footer>
+
+</body>
+</html>
