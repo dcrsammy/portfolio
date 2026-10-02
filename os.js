@@ -29,19 +29,19 @@ var PROJECTS=[
    desc:"A luxury handbag brand and store with two product lines, The Edit and By Request, a video-led homepage, Paystack checkout and an admin panel with a content editor.",stack:"Supabase, Paystack, custom admin"},
   {id:"afrosteeze",name:"AFRO STEEZE",kind:"store",sub:"Client, Nigerian fashion brand",status:"Live",url:"https://afrosteeeze.com",host:"afrosteeeze.com",shot:"shots/afrosteeze.jpg",
    desc:"A 20+ page custom store with its own admin panel. I also fixed the async Paystack callback issue that quietly breaks checkout on a lot of Nigerian stores.",stack:"JavaScript, Cloudinary, Paystack, Netlify"},
-  {id:"omaq",name:"OMAQ Foods",kind:"site",sub:"Client, UK catering business",status:"Live",color:["#e2552d","#8f2a12"],mark:"OQ",
+  {id:"omaq",name:"OMAQ Foods",kind:"site",sub:"Client, UK catering business",status:"Live",url:"https://omaqfoods.netlify.app",host:"omaqfoods.netlify.app",shot:"shots/omaq.jpg",
    desc:"Online ordering for a UK African catering business. Customers pay by card, and every new order lands on the owner's WhatsApp. The owner manages everything from a password-protected dashboard.",stack:"Stripe Checkout, Supabase, Netlify Functions"},
   {id:"bankapp",name:"Banking web app",kind:"app",sub:"Client, US fintech",status:"In development",color:["#1f3a5f","#0b1a2e"],mark:"$",
    desc:"The customer web app for a US banking client that moves real money. The client handles licensing and banking partners, and I'm building the product. Details stay private until launch.",stack:"Web app"},
-  {id:"adunni",name:"Adunni Hair Studio",kind:"site",sub:"Booking site and shop",status:"In progress",shot:"shots/adunni.jpg",
+  {id:"adunni",name:"Adunni Hair Studio",kind:"site",sub:"Booking site and shop",status:"In progress",url:"/demos/adunni/",host:"demo",shot:"shots/adunni.jpg",
    desc:"A hair studio site where clients shop products and book braids, installs, ponytails, revamps, consultations and styling. Fixed time slots with one client per slot, so the stylist can never be double-booked.",stack:"HTML, CSS, JavaScript, live availability"},
-  {id:"altamar",name:"Altamar Privé",kind:"site",sub:"Sailing charters, Ensenada, Mexico",status:"Pitch demo",shot:"shots/altamar.jpg",
+  {id:"altamar",name:"Altamar Privé",kind:"site",sub:"Sailing charters, Ensenada, Mexico",status:"Pitch demo",url:"/demos/altamar/",host:"demo",shot:"shots/altamar.jpg",
    desc:"A multi-page site for a luxury sailing charter business: the fleet, sunset and winery cruises, partner wineries and a booking request flow, with an English and Spanish switch.",stack:"HTML, CSS, JavaScript, English/Spanish"},
-  {id:"primeautos",name:"Prime Autos Lagos",kind:"site",sub:"Car dealer website",status:"Demo",shot:"shots/primeautos.jpg",
+  {id:"primeautos",name:"Prime Autos Lagos",kind:"site",sub:"Car dealer website",status:"Demo",url:"/demos/primeautos/",host:"demo",shot:"shots/primeautos.jpg",
    desc:"A website for Lagos car dealers: every car on the yard with real photos, mileage and the price on the glass, filters by brand and budget, and one-tap call or WhatsApp. Built to pitch dealers like BimBim Autos.",stack:"HTML, CSS, JavaScript, WhatsApp"},
-  {id:"isinmi",name:"Isinmi Stays",kind:"site",sub:"Short-let booking website",status:"Demo",shot:"shots/isinmi.jpg",
+  {id:"isinmi",name:"Isinmi Stays",kind:"site",sub:"Short-let booking website",status:"Demo",url:"/demos/isinmi/",host:"demo",shot:"shots/isinmi.jpg",
    desc:"A booking site for short-let hosts in Ikoyi, Lekki and Victoria Island. Guests pick dates, see the real price and book straight with the host on WhatsApp.",stack:"HTML, CSS, JavaScript, WhatsApp"},
-  {id:"stylefinder",name:"Style Finder",kind:"app",sub:"Personal style web app, my own product",status:"Prototype",shot:"shots/stylefinder.jpg",
+  {id:"stylefinder",name:"Style Finder",kind:"app",sub:"Personal style web app, my own product",status:"Prototype",url:"/demos/stylefinder/",host:"demo",shot:"shots/stylefinder.jpg",
    desc:"A five-minute quiz that works out what fits you, your colours and your style, including a selfie colour drape. The quiz is free, and the full style report is a paid upgrade shown in each visitor's local currency.",stack:"JavaScript, AI-generated outfit library"},
   {id:"fitcheck",name:"FitCheck",kind:"app",sub:"AI stylist, my own product",status:"Back soon",color:["#7b5cff","#3b2a8f"],mark:"Fc",
    desc:"An AI stylist. Upload your wardrobe, get outfits built from what you already own, and plan what to wear for the week. Paid plans with usage limits.",stack:"Claude API, Supabase, Cloudinary, Paystack subscriptions"},
@@ -51,11 +51,11 @@ var PROJECTS=[
    desc:"A Lagos streetwear label's store built around limited drops: password-gated releases, a polaroid-style product grid, Paystack checkout, order tracking and an admin panel.",stack:"Supabase, Paystack, Resend, Cloudinary, Netlify"},
   {id:"sadora",name:"Sadora Beauty Hub",kind:"site",sub:"Client, beauty studio in Ajah",status:"Live",color:["#e7b7c1","#b0697a"],mark:"Sb",
    desc:"A luxury landing page for a women-only beauty studio, with service packages and booking straight through WhatsApp. Built mobile-first, because that's where her clients find her.",stack:"HTML, CSS, JavaScript, Netlify"},
-  {id:"sino",name:"Sino Africa Trading",kind:"site",sub:"Client, trade company in Abuja",status:"Live",color:["#c8102e","#7a0a1c"],mark:"SA",
+  {id:"sino",name:"Sino Africa Trading",kind:"site",sub:"Client, trade company in Abuja",status:"Live",url:"https://sinoafrica.netlify.app",host:"sinoafrica.netlify.app",shot:"shots/sino.jpg",
    desc:"A five-page website for a China–Nigeria trade and logistics company, explaining its services and how importing with them works.",stack:"HTML, CSS, JavaScript, Netlify"},
-  {id:"dcrclothier",name:"DCR Clothier",kind:"store",sub:"Online store",status:"Live",color:["#2b2b2b","#0d0d0d"],mark:"DC",
+  {id:"dcrclothier",name:"DCR Clothier",kind:"store",sub:"Online store",status:"Live",url:"https://dcrclothier.netlify.app",host:"dcrclothier.netlify.app",shot:"shots/dcrclothier.jpg",
    desc:"A streetwear store with product management and an admin panel for stock and orders.",stack:"Supabase, JavaScript"},
-  {id:"olawaleos",name:"OlawaleOS",kind:"site",sub:"This portfolio",status:"Live",color:["#2b385f","#0f1529"],mark:"AO",
+  {id:"olawaleos",name:"OlawaleOS",kind:"site",sub:"This portfolio",status:"Live",url:"https://olawale.nostalgicambition.com",host:"olawale.nostalgicambition.com",color:["#2b385f","#0f1529"],mark:"AO",
    desc:"The site you're using: a desktop in the browser with draggable windows, a WebGL phone, a character-art wallpaper that follows the Lagos sky, three languages and an AI terminal. Hand-written, no framework.",stack:"HTML, CSS, JavaScript, three.js, Claude API, Netlify Functions"}
 ];
 var LAB=[
@@ -79,7 +79,7 @@ var I18N={
      seeWork:"See my work",workTitle:"Things I've built",fAll:"All",fStore:"Online stores",fApp:"Apps and platforms",fSite:"Business websites",fProgress:"In progress",labTitle:"In the lab",labSub:"Ideas I'm exploring next. Not built yet, but open to the right partner.",
      ordersHint:"Tap pay on the customer's phone and watch the order land on the owner's WhatsApp. This is how the ordering sites I build work.",
      spin:"Drag to spin. Tap the phone to switch project.",contactBig:"Tell me what you're building.",contactSub:"Send a message with what your business does and what you need. I usually reply the same day, Lagos time.",
-     start:"start",madeIn:"hand-built in Lagos",done:"Done",visit:"Visit site",next:"Next project",reboot:"Restart OlawaleOS",askBtn:"Ask OlawaleOS",
+     start:"start",madeIn:"hand-built in Lagos",done:"Done",visit:"Visit site",next:"Next project",requestDemo:"Request a demo",buildTogether:"Build this together",reboot:"Restart OlawaleOS",askBtn:"Ask OlawaleOS",
      sky:{night:"night in Lagos",dawn:"dawn in Lagos",morning:"morning in Lagos",day:"midday in Lagos",golden:"golden hour in Lagos",dusk:"dusk in Lagos"},
      around:"I'm around now. It's {t} in Lagos, so expect a quick reply.",away:"It's {t} in Lagos. Message me and I'll reply first thing in the morning.",
      intro:null},
@@ -89,7 +89,7 @@ var I18N={
      seeWork:"Wo iṣẹ́ mi",workTitle:"Àwọn ohun tí mo ti kọ́",fAll:"Gbogbo",fStore:"Ilé ìtajà",fApp:"Áàpù",fSite:"Ojú òpó oníṣòwò",fProgress:"Èyí tó ń lọ lọ́wọ́",labTitle:"Nínú yàrá àdánwò",labSub:"Àwọn èrò tí mo ń ronú lé lórí. A kò tíì kọ́ wọn.",
      ordersHint:"Tẹ “Pay” lórí fóònù oníbàárà, kí o sì wo bí àṣẹ ṣe ń dé WhatsApp olówó. Báyìí ni àwọn ojú òpó tí mo ń kọ́ ṣe ń ṣiṣẹ́.",
      spin:"Fà á láti yí i. Tẹ fóònù láti yí iṣẹ́ padà.",contactBig:"Sọ ohun tí o fẹ́ kọ́ fún mi.",contactSub:"Kọ̀wé sí mi nípa iṣẹ́ rẹ àti ohun tí o nílò. Mo sábà máa ń fèsì ní ọjọ́ kan náà.",
-     start:"bẹ̀rẹ̀",madeIn:"a fi ọwọ́ kọ́ ọ ní Èkó",done:"Ó tán",visit:"Ṣèbẹ̀wò",next:"Iṣẹ́ tó kàn",reboot:"Tún OlawaleOS bẹ̀rẹ̀",askBtn:"Bi OlawaleOS léèrè",
+     start:"bẹ̀rẹ̀",madeIn:"a fi ọwọ́ kọ́ ọ ní Èkó",done:"Ó tán",visit:"Ṣèbẹ̀wò",next:"Iṣẹ́ tó kàn",requestDemo:"Béèrè fún àpẹẹrẹ",buildTogether:"Jẹ́ ká jọ kọ́ ọ",reboot:"Tún OlawaleOS bẹ̀rẹ̀",askBtn:"Bi OlawaleOS léèrè",
      sky:{night:"alẹ́ ní Èkó",dawn:"àfẹ̀mọ́jú ní Èkó",morning:"òwúrọ̀ ní Èkó",day:"ọ̀sán ní Èkó",golden:"ìrọ̀lẹ́ ní Èkó",dusk:"àṣálẹ́ ní Èkó"},
      around:"Mo wà níbí báyìí. Agogo {t} ni ní Èkó, màá fèsì kíákíá.",away:"Agogo {t} ni ní Èkó. Kọ̀wé sí mi, màá fèsì ní òwúrọ̀.",
      intro:"Èmi ni Ọláwálé, olùgbéjáde sọ́fítíwià ní Èkó. Mo ń kọ́ ojú òpó wẹ́ẹ̀bù àti áàpù tí àwọn oníṣòwò ń lò lóòótọ́."},
@@ -99,7 +99,7 @@ var I18N={
      seeWork:"查看作品",workTitle:"我做过的项目",fAll:"全部",fStore:"网店",fApp:"应用与平台",fSite:"企业网站",fProgress:"进行中",labTitle:"实验室",labSub:"正在构思的下一批想法，尚未开发，欢迎合作。",
      ordersHint:"在顾客手机上点“支付”，看订单如何实时出现在店主的 WhatsApp 上。我做的点单网站就是这样运作的。",
      spin:"拖动旋转，点击手机切换项目。",contactBig:"告诉我你想做什么。",contactSub:"发消息告诉我你的业务和需求。我通常当天回复（拉各斯时间）。",
-     start:"开始",madeIn:"拉各斯手工打造",done:"完成",visit:"访问网站",next:"下一个项目",reboot:"重启 OlawaleOS",askBtn:"问问 OlawaleOS",
+     start:"开始",madeIn:"拉各斯手工打造",done:"完成",visit:"访问网站",next:"下一个项目",requestDemo:"申请演示",buildTogether:"一起来做",reboot:"重启 OlawaleOS",askBtn:"问问 OlawaleOS",
      sky:{night:"拉各斯 · 夜晚",dawn:"拉各斯 · 黎明",morning:"拉各斯 · 早晨",day:"拉各斯 · 中午",golden:"拉各斯 · 黄昏",dusk:"拉各斯 · 傍晚"},
      around:"我现在在线。拉各斯时间 {t}，很快回复你。",away:"拉各斯现在是 {t}。给我留言，明早第一时间回复。",
      intro:"我是 Olawale，拉各斯的全栈开发者。我打造企业真正会用的网站和应用。"}
@@ -118,6 +118,8 @@ function applyLang(){
   if(lang==="en"){ intro.innerHTML=INTRO_EN; } else { intro.textContent=I18N[lang].intro; }
   $$("[data-t=visit]").forEach(function(el){ el.textContent=t("visit"); });
   $$("[data-t=next]").forEach(function(el){ el.textContent=t("next")+" →"; });
+  $$("[data-t=requestDemo]").forEach(function(el){ el.textContent=t("requestDemo"); });
+  $$("[data-t=buildTogether]").forEach(function(el){ el.textContent=t("buildTogether"); });
   tick();
 }
 
@@ -160,11 +162,12 @@ ALL.forEach(function(p){
   s.setAttribute("role","dialog"); s.setAttribute("aria-labelledby","t-p-"+p.id);
   var st=stClass(p.status);
   var shot=p.shot?'<img src="'+p.shot+'" alt="'+p.name+' on a phone" loading="lazy">':'<div class="ph" style="background:linear-gradient(160deg,'+p.color[0]+','+p.color[1]+');color:#fff">'+p.name+'</div>';
-  s.innerHTML='<div class="titlebar"><button class="close" type="button" aria-label="Close" data-label="Done"></button><span class="title" id="t-p-'+p.id+'">'+(p.host||p.id+".project")+'</span></div>'+
+  s.innerHTML='<div class="titlebar"><button class="close" type="button" aria-label="Close" data-label="Done"></button><span class="title" id="t-p-'+p.id+'">'+(p.host==="demo"?"demos/"+p.id:(p.host||p.id+".project"))+'</span></div>'+
     '<div class="body"><div class="proj"><div class="shot">'+shot+'</div><div>'+
     '<h2>'+p.name+'</h2><p class="muted">'+p.sub+'</p><p style="margin-top:.5rem"><span class="badge '+st+'">'+p.status+'</span></p>'+
     '<p style="margin-top:1rem">'+p.desc+'</p><ul class="kv"><li><span>Built with</span><b>'+p.stack+'</b></li></ul>'+
-    '<div class="row">'+(p.url?'<a class="btn primary" href="'+p.url+'" target="_blank" rel="noopener" data-t="visit">Visit site</a>':'')+(p.kind==="lab"?'<a class="btn dark" href="https://wa.me/2348109549274" target="_blank" rel="noopener">Want to build this together?</a>':'')+
+    '<div class="row">'+(p.url?'<a class="btn primary" href="'+p.url+'" target="_blank" rel="noopener" data-t="visit">Visit site</a>':
+      '<a class="btn primary" href="https://wa.me/2348109549274?text='+encodeURIComponent(p.kind==="lab"?"Hi Olawale, I'd like to talk about building "+p.name+" together.":"Hi Olawale, I saw "+p.name+" on your portfolio. Could I see a demo?")+'" target="_blank" rel="noopener" data-t="'+(p.kind==="lab"?"buildTogether":"requestDemo")+'">'+(p.kind==="lab"?"Build this together":"Request a demo")+'</a>')+
     '<button class="btn" type="button" data-open="p-'+nxt.id+'" data-t="next">Next project →</button></div></div></div></div>';
   pw.appendChild(s);
 });
@@ -397,11 +400,11 @@ $("#pay").addEventListener("click",function(){
 renderOrder();
 
 /* ================= 3D phone ================= */
-var SHOW=PROJECTS.filter(function(p){ return p.shot&&p.url; }), cur=0, phoneActive=false, three=null;
+var SHOW=["digitalschool","mayree","afrosteeze","omaq","citypulse","altamar","primeautos","isinmi"].map(proj), cur=0, phoneActive=false, three=null;
 SHOW.forEach(function(p,i){ var d=document.createElement("button"); d.type="button"; d.setAttribute("aria-label","Show "+p.name); d.addEventListener("click",function(){ goShow(i); }); $("#dots").appendChild(d); });
 function caption(){
   var p=SHOW[cur]; $("#show-name").textContent=p.name; $("#show-link").href=p.url; $("#show-link").textContent=t("visit");
-  var st=$("#show-status"); st.textContent=/^Live/.test(p.status)?p.status:"In testing"; st.className="badge "+stClass(p.status);
+  var st=$("#show-status"); st.textContent=p.status; st.className="badge "+stClass(p.status);
   $$("#dots button").forEach(function(d,i){ d.setAttribute("aria-current",i===cur?"true":"false"); }); $("#fb-img").src=p.shot;
 }
 var goShow=function(i){ cur=(i+SHOW.length)%SHOW.length; caption(); };
@@ -588,7 +591,7 @@ openWin=function(id){ _open(id); if(id==="ask"){ termIntro(); if(!isMobile()) se
 
 /* ================= boot sequence ================= */
 function boot(force){
-  if(!force&&reduce) return;
+  if(document.getElementById("boot")) return;
   var LINES=[["OlawaleOS v1.0 · Lagos, Nigeria",""],["checking memory ............ ","ok"],["loading fonts ............... ","ok"],["mounting /work ("+PROJECTS.length+" projects) ... ","ok"],["mounting /lab ("+LAB.length+" ideas) ...... ","ok"],
     ["loading Paystack drivers ..... ","ok"],["loading Stripe drivers ....... ","ok"],["connecting to WhatsApp ....... ","ok"],["syncing clocks: LAG LDN NYC .. ","ok"],["languages: Yorùbá · English · 中文 ","ok"],["starting desktop",""]];
   var el=document.createElement("div"); el.id="boot"; el.setAttribute("role","status"); el.setAttribute("aria-label","OlawaleOS is starting");
@@ -596,7 +599,8 @@ function boot(force){
   document.body.appendChild(el);
   var log=$(".log",el), bar=$(".bar i",el), i=0, finished=false;
   function finish(){ if(finished) return; finished=true; born=performance.now(); el.classList.add("done"); setTimeout(function(){ el.remove(); },500); document.removeEventListener("keydown",finish); }
-  (function next(){
+  if(reduce){ LINES.forEach(function(L){ var p=document.createElement("p"); p.textContent=L[0]+(L[1]?"[ ok ]":""); log.appendChild(p); }); bar.style.width="100%"; setTimeout(finish,900); }
+  else (function next(){
     if(finished) return;
     if(i>=LINES.length){ setTimeout(finish,250); return; }
     var L=LINES[i++], p=document.createElement("p"); p.textContent=L[0];

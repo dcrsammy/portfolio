@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Style Finder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gloock&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EFEDEA; --surface:#FFFFFF; --ink:#22201E; --muted:#6E6A64; --line:#D9D5CF;
+  --thread:#2743C9; --thread-ink:#FFFFFF; --soft:#E4E1DC;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#17181B; --surface:#212226; --ink:#EDEBE7; --muted:#A09C95; --line:#34353A;
+    --thread:#7D93FF; --thread-ink:#10121A; --soft:#2A2B30;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#17181B; --surface:#212226; --ink:#EDEBE7; --muted:#A09C95; --line:#34353A;
+  --thread:#7D93FF; --thread-ink:#10121A; --soft:#2A2B30;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);
+  font-family:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.5;
+  -webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Gloock",Georgia,"Times New Roman",serif;font-weight:400;margin:0;line-height:1.1}
+h1{font-size:clamp(2.6rem,11vw,4rem)}
+h2{font-size:clamp(1.8rem,7vw,2.4rem)}
+h3{font-size:1.25rem}
+p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--thread);outline-offset:3px}
+img{max-width:100%}
+
+.wrap{max-width:560px;margin:0 auto;padding:20px 20px 120px}
+.thread{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;height:3px;background:var(--line)}
+.thread i{display:block;height:100%;width:0;background:var(--thread);transition:width .4s ease}
+
+.screen{display:none}
+.screen.on{display:block;animation:in .35s ease}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.screen.on{animation:none}.thread i{transition:none}}
+
+.step{color:var(--muted);font-size:.9rem;margin:18px 0 10px}
+.lead{color:var(--muted);margin-top:10px;max-width:46ch}
+
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--bg);
+  border-top:1px solid var(--line);padding:12px 20px calc(12px + env(safe-area-inset-bottom,0px))}
+.bar-in{max-width:560px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.btn{border:1.5px solid var(--ink);background:transparent;border-radius:999px;padding:13px 20px;font-weight:600;flex:1}
+.btn.solid{background:var(--ink);color:var(--bg)}
+.btn.thread-btn{background:var(--thread);border-color:var(--thread);color:var(--thread-ink)}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn.ghost{border-color:transparent;flex:0 0 auto;color:var(--muted)}
+
+/* intro */
+.hero{padding-top:28px}
+.swatch-row{display:flex;margin:34px 0 28px;height:120px}
+.swatch-row span{flex:1;border-radius:4px 4px 0 0;transform-origin:bottom;animation:rise .7s cubic-bezier(.2,.8,.2,1) backwards}
+@media (prefers-reduced-motion:reduce){.swatch-row span{animation:none}}
+@keyframes rise{from{transform:scaleY(0)}}
+.how{margin-top:28px;display:grid;gap:14px}
+.how div{display:flex;gap:14px;align-items:baseline}
+.how b{font-family:"Gloock",Georgia,serif;font-weight:400;font-size:1.3rem;min-width:1.2em;color:var(--thread)}
+
+/* options */
+.opts{display:grid;gap:10px;margin-top:22px}
+.opts.two{grid-template-columns:1fr 1fr}
+.opts.two .opt{min-width:0}
+.group-h{margin:22px 0 -10px;color:var(--muted);font-size:.9rem;font-weight:600}
+.opt{display:flex;gap:14px;align-items:center;text-align:left;background:var(--surface);
+  border:1.5px solid var(--line);border-radius:14px;padding:14px}
+.opt[aria-pressed="true"]{border-color:var(--thread);box-shadow:0 0 0 1px var(--thread) inset}
+.opt small{display:block;color:var(--muted);font-size:.85rem;margin-top:2px}
+.opt svg{flex:0 0 auto}
+.opt.col{flex-direction:column;align-items:center;text-align:center}
+
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.chip{width:48px;height:48px;border-radius:50%;border:2px solid var(--line);padding:0}
+.chip[aria-pressed="true"]{outline:3px solid var(--thread);outline-offset:3px;border-color:transparent}
+.sub-q{margin-top:28px;font-weight:600}
+
+/* drape */
+.upload{margin-top:22px;display:grid;gap:10px}
+.upload label{display:flex;justify-content:center;align-items:center;gap:10px;border:1.5px dashed var(--muted);border-radius:14px;padding:26px;cursor:pointer;background:var(--surface);font-weight:600}
+.upload input{position:absolute;width:1px;height:1px;opacity:0}
+.tips{color:var(--muted);font-size:.9rem;display:grid;gap:4px;margin-top:6px}
+
+.mirror{position:relative;width:min(78vw,300px);margin:26px auto 0;aspect-ratio:1/1.28;touch-action:pan-y;user-select:none}
+.face{position:absolute;left:12%;right:12%;top:0;aspect-ratio:1;border-radius:50%;overflow:hidden;background:var(--soft)}
+.face img{width:100%;height:100%;object-fit:cover;display:block}
+.cape{position:absolute;left:0;right:0;bottom:0;width:100%;height:auto;transition:transform .25s ease}
+.cape path{transition:fill .3s ease}
+.drape-meta{display:flex;justify-content:space-between;align-items:baseline;margin-top:18px}
+.drape-name{font-family:"Gloock",Georgia,serif;font-size:1.5rem}
+.drape-count{color:var(--muted);font-size:.9rem}
+.picked{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;min-height:22px}
+.picked span{width:22px;height:22px;border-radius:50%;border:1px solid var(--line)}
+
+/* grid */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:20px}
+@media (min-width:480px){.grid{grid-template-columns:repeat(3,1fr)}}
+.look{min-width:0;position:relative;border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 0 6px;aspect-ratio:3/4}
+.look svg{width:100%;height:100%}
+.look[aria-pressed="true"]{border-color:var(--thread);box-shadow:0 0 0 1px var(--thread) inset}
+.look .heart{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;
+  background:var(--bg);font-size:14px;opacity:0;transform:scale(.6);transition:.2s}
+.look[aria-pressed="true"] .heart{opacity:1;transform:none;background:var(--thread);color:var(--thread-ink)}
+
+/* results */
+.reveal-words{font-family:"Gloock",Georgia,serif;font-size:clamp(2.2rem,10vw,3.4rem);line-height:1.05;margin-top:6px}
+.reveal-words span{display:block;animation:rise2 .6s cubic-bezier(.2,.8,.2,1) backwards}
+.reveal-words span:nth-child(2){animation-delay:.15s}
+.reveal-words span:nth-child(3){animation-delay:.3s}
+@keyframes rise2{from{opacity:0;transform:translateY(14px)}}
+@media (prefers-reduced-motion:reduce){.reveal-words span{animation:none}}
+.facts{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.facts span{border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:.9rem;background:var(--surface)}
+.block{margin-top:30px}
+.block h3{margin-bottom:12px}
+.palette{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.sw{border-radius:10px;overflow:hidden;border:1px solid var(--line);background:var(--surface)}
+.sw i{display:block;height:74px}
+.sw small{display:block;padding:6px 8px;font-size:.8rem}
+.sw small em{font-style:normal;color:var(--muted);display:block}
+.locked{position:relative}
+.locked .blur{filter:blur(7px);pointer-events:none;user-select:none}
+.lock-tag{position:absolute;inset:0;display:grid;place-items:center}
+.lock-tag span{background:var(--ink);color:var(--bg);border-radius:999px;padding:6px 14px;font-size:.85rem;font-weight:600}
+ul.clean{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+ul.clean li{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.pay{margin-top:34px;background:var(--surface);border:1.5px solid var(--ink);border-radius:18px;padding:22px}
+.price{font-family:"Gloock",Georgia,serif;font-size:2.4rem;margin:6px 0 2px}
+.fine{color:var(--muted);font-size:.85rem}
+.pay ul{margin:14px 0 18px;padding-left:18px;display:grid;gap:4px}
+.pay .btn{width:100%}
+.note{margin-top:12px;font-size:.85rem;color:var(--muted);text-align:center}
+.linkish{background:none;border:0;padding:0;text-decoration:underline;color:var(--muted);font-size:.85rem}
+
+dialog{border:0;border-radius:18px;padding:22px;max-width:360px;background:var(--surface);color:var(--ink)}
+dialog::backdrop{background:rgba(0,0,0,.45)}
+dialog .btn{width:100%;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="thread" aria-hidden="true"><i id="progress"></i></div>
+
+<main class="wrap">
+
+  <!-- 0 intro -->
+  <section class="screen on" data-step="0" aria-labelledby="t0">
+    <div class="hero">
+      <h1 id="t0">Find the clothes that were made for you.</h1>
+      <p class="lead">Your shape, your colours and your taste, worked out in about five minutes.</p>
+      <div class="swatch-row" aria-hidden="true" id="introSwatches"></div>
+      <div class="how">
+        <div><b>1</b><p>Tell us who you dress as, your shape and your proportions.</p></div>
+        <div><b>2</b><p>Hold colours up to your face with a selfie and see what lights you up.</p></div>
+        <div><b>3</b><p>Tap the looks you love. We find the pattern.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- gender -->
+  <section class="screen" data-step="1" aria-labelledby="tg">
+    <p class="step">Step 1 of 7</p>
+    <h2 id="tg">Which clothes do you want to see?</h2>
+    <p class="lead">This sets the body shapes and outfits we show you.</p>
+    <div class="opts" id="genderOpts"></div>
+  </section>
+
+  <!-- 1 shape -->
+  <section class="screen" data-step="2" aria-labelledby="t1">
+    <p class="step">Step 2 of 7</p>
+    <h2 id="t1">Which shape looks most like you?</h2>
+    <p class="lead">Stand in front of a mirror in fitted clothes and compare your shoulders, waist and hips.</p>
+    <div class="opts" id="shapeOpts"></div>
+  </section>
+
+  <!-- 2 proportion -->
+  <section class="screen" data-step="3" aria-labelledby="t2">
+    <p class="step">Step 3 of 7</p>
+    <h2 id="t2">How do your torso and legs compare?</h2>
+    <p class="lead">Look at where your waist sits between your shoulders and your feet.</p>
+    <div class="opts" id="propOpts"></div>
+  </section>
+
+  <!-- 3 skin + hair -->
+  <section class="screen" data-step="4" aria-labelledby="t3">
+    <p class="step">Step 4 of 7</p>
+    <h2 id="t3">Your skin and hair</h2>
+    <p class="sub-q">Pick the closest skin depth</p>
+    <div class="chips" id="skinChips"></div>
+    <p class="sub-q">Your natural hair colour</p>
+    <div class="opts two" id="hairOpts"></div>
+  </section>
+
+  <!-- 4 veins -->
+  <section class="screen" data-step="5" aria-labelledby="t4">
+    <p class="step">Step 5 of 7</p>
+    <h2 id="t4">Look at the veins on your inner wrist</h2>
+    <p class="lead">Check in daylight. What colour do they look?</p>
+    <div class="opts" id="veinOpts"></div>
+  </section>
+
+  <!-- 5 photo -->
+  <section class="screen" data-step="6" aria-labelledby="t5">
+    <p class="step">Step 6 of 7</p>
+    <h2 id="t5">The colour drape</h2>
+    <p class="lead">Add a selfie and we'll hold colours under your face, the way a stylist would with fabric.</p>
+    <div class="upload">
+      <label for="selfie">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
+        Take or upload a selfie
+      </label>
+      <input type="file" id="selfie" accept="image/*" capture="user">
+      <div class="tips">
+        <span>Face a window in daylight.</span>
+        <span>No filters and no makeup if you can.</span>
+        <span>Pull your hair back from your face.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 drape -->
+  <section class="screen" data-step="7" aria-labelledby="t6">
+    <p class="step">Step 6 of 7</p>
+    <h2 id="t6">Does this colour brighten your face?</h2>
+    <p class="lead">Look at your skin, not the colour. Good colours make you look rested; bad ones make you look tired or grey.</p>
+    <div class="mirror" id="mirror">
+      <div class="face" id="face"></div>
+      <svg class="cape" id="cape" viewBox="0 0 300 150" aria-hidden="true">
+        <path id="capePath" d="M0 150 L0 70 Q20 30 90 22 Q120 58 150 58 Q180 58 210 22 Q280 30 300 70 L300 150 Z"/>
+      </svg>
+    </div>
+    <div class="drape-meta">
+      <span class="drape-name" id="drapeName"></span>
+      <span class="drape-count" id="drapeCount"></span>
+    </div>
+    <div class="picked" id="picked" aria-label="Colours that brighten you"></div>
+  </section>
+
+  <!-- 7 grid -->
+  <section class="screen" data-step="8" aria-labelledby="t7">
+    <p class="step">Step 7 of 7</p>
+    <h2 id="t7">Tap every look you'd wear</h2>
+    <p class="lead">Go with your gut. Pick at least five.</p>
+    <div class="grid" id="lookGrid"></div>
+  </section>
+
+  <!-- 8 results -->
+  <section class="screen" data-step="9" aria-labelledby="t8">
+    <p class="step">Your style</p>
+    <h2 id="t8" class="reveal-words"></h2>
+    <div class="facts" id="facts"></div>
+
+    <div class="block">
+      <h3>Your palette</h3>
+      <div class="palette" id="paletteFree"></div>
+      <div class="locked" id="palLockWrap" style="margin-top:8px">
+        <div class="palette" id="paletteLocked"></div>
+        <div class="lock-tag"><span>In your full report</span></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>What fits you</h3>
+      <div class="locked" id="fitWrap">
+        <ul class="clean" id="fitList"></ul>
+        <div class="lock-tag"><span>In your full report</span></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Your outfit formulas</h3>
+      <div class="locked" id="formWrap">
+        <ul class="clean" id="formList"></ul>
+        <div class="lock-tag"><span>In your full report</span></div>
+      </div>
+    </div>
+
+    <div class="pay" id="payBox">
+      <h3>Get your full style report</h3>
+      <p class="price" id="price">$5</p>
+      <p class="fine" id="priceNote">One-time payment</p>
+      <ul>
+        <li>Your full palette: neutrals, main colours and accents</li>
+        <li>The cuts and fits that suit your shape</li>
+        <li>Outfit formulas built from your colours</li>
+        <li>A shareable style card for your Stories</li>
+      </ul>
+      <button class="btn thread-btn" id="unlockBtn">Unlock my report</button>
+    </div>
+    <p class="note"><button class="linkish" id="restart">Start again</button></p>
+  </section>
+</main>
+
+<nav class="bar" id="bar">
+  <div class="bar-in" id="barIn"></div>
+</nav>
+
+<dialog id="payDialog">
+  <h3>Checkout comes next</h3>
+  <p class="lead" style="margin-top:8px">Paystack payment and accounts are part of the next build. For now you can preview what the full report looks like.</p>
+  <button class="btn solid" id="previewFull">Preview the full report</button>
+  <button class="btn" id="closeDialog">Close</button>
+</dialog>
+
+<script>
+(function(){
+  /* ---------- data ---------- */
+  const GENDERS=[{id:'w',name:'Women\'s clothes'},{id:'m',name:'Men\'s clothes'},{id:'a',name:'Show me both'}];
+  const SHAPES_W=[
+    {id:'w-hourglass',name:'Hourglass',d:'Bust and hips even, waist clearly narrower',s:[15,8,16],g:'w'},
+    {id:'w-pear',name:'Pear',d:'Hips wider than your shoulders',s:[11,9,18],g:'w'},
+    {id:'w-apple',name:'Apple',d:'Fuller through the middle, slimmer legs',s:[14,17,14],g:'w'},
+    {id:'w-rectangle',name:'Rectangle',d:'Shoulders, waist and hips are similar',s:[14,13,14],g:'w'},
+    {id:'w-inverted',name:'Inverted triangle',d:'Shoulders or bust wider than your hips',s:[18,11,11],g:'w'}
+  ];
+  const SHAPES_M=[
+    {id:'m-v',name:'V-shape',d:'Broad shoulders, narrow waist',s:[20,11,11],g:'m'},
+    {id:'m-trapezoid',name:'Trapezoid',d:'Shoulders a little wider than your waist',s:[17,13,13],g:'m'},
+    {id:'m-rectangle',name:'Rectangle',d:'Shoulders, waist and hips about the same',s:[14,14,14],g:'m'},
+    {id:'m-triangle',name:'Triangle',d:'Hips and waist wider than your shoulders',s:[12,15,17],g:'m'},
+    {id:'m-oval',name:'Oval',d:'Fuller through the middle',s:[14,19,14],g:'m'}
+  ];
+  const SHAPES=[...SHAPES_W,...SHAPES_M];
+  const PROPS=[
+    {id:'torso',name:'Longer torso',d:'Your waist sits lower; legs look shorter'},
+    {id:'even',name:'About even',d:'Your waist sits near the middle'},
+    {id:'legs',name:'Longer legs',d:'Your waist sits higher; torso looks shorter'}
+  ];
+  const SKINS=['#F3D9C6','#E3B999','#C99468','#A36B45','#77482C','#4A2C1D'];
+  const HAIRS=[{id:0,name:'Blonde or grey',c:'#D9C08A'},{id:1,name:'Light brown or red',c:'#9A5B34'},{id:2,name:'Dark brown',c:'#4A2E1E'},{id:3,name:'Black',c:'#15110F'}];
+  const VEINS=[
+    {id:'warm',name:'Green or olive',c:'#5D7A3A'},
+    {id:'cool',name:'Blue or purple',c:'#4B5CA8'},
+    {id:'neutral',name:'Hard to tell, a mix',c:'linear-gradient(90deg,#5D7A3A,#4B5CA8)'}
+  ];
+  const DRAPES=[
+    {n:'Mustard',c:'#D4A017',t:'warm'},{n:'Cobalt',c:'#2F4FD1',t:'cool'},{n:'Rust',c:'#B7472A',t:'warm'},
+    {n:'Emerald',c:'#0F8A5F',t:'cool'},{n:'Camel',c:'#C19A6B',t:'warm'},{n:'Fuchsia',c:'#C2185B',t:'cool'},
+    {n:'Pure white',c:'#FFFFFF',t:'cool'},{n:'Cream',c:'#F1E6CF',t:'warm'},{n:'Olive',c:'#6B7A2E',t:'warm'},
+    {n:'Icy grey',c:'#C9D1DC',t:'cool'},{n:'Coral',c:'#F08A5D',t:'warm'},{n:'Navy',c:'#1F2A48',t:'cool'},
+    {n:'Chocolate',c:'#4B2E1E',t:'warm'},{n:'Lavender',c:'#A99BD6',t:'cool'},{n:'Black',c:'#000000',t:'neutral'}
+  ];
+  const VIBES={minimal:'Minimal',street:'Street',classic:'Classic',earthy:'Earthy',bold:'Bold',soft:'Soft',edgy:'Edgy',relaxed:'Relaxed',polished:'Polished',sporty:'Sporty'};
+  // tag schema: vibes[], top, bottom, fit, colours[top,bottom,shoes]
+  const LOOKS=[
+    [['minimal','polished'],'shirt','straight','fitted',['#FFFFFF','#22201E','#22201E']],
+    [['street','relaxed'],'hoodie','wide','over',['#3A3D42','#6B7A2E','#FFFFFF']],
+    [['earthy','relaxed'],'shirt','wide','over',['#C19A6B','#F1E6CF','#4B2E1E']],
+    [['bold','street'],'tee','wide','over',['#C2185B','#1F2A48','#FFFFFF']],
+    [['classic','polished'],'coat','straight','fitted',['#C19A6B','#1F2A48','#4B2E1E']],
+    [['soft','minimal'],'tee','skirt','fitted',['#A99BD6','#F1E6CF','#FFFFFF']],
+    [['edgy','street'],'coat','slim','fitted',['#000000','#000000','#000000']],
+    [['sporty','relaxed'],'tee','shorts','over',['#FFFFFF','#2F4FD1','#FFFFFF']],
+    [['earthy','classic'],'coat','wide','over',['#6B7A2E','#F1E6CF','#4B2E1E']],
+    [['bold','soft'],'shirt','skirt','fitted',['#F08A5D','#D4A017','#F1E6CF']],
+    [['minimal','relaxed'],'tee','wide','over',['#C9D1DC','#C9D1DC','#FFFFFF']],
+    [['polished','classic'],'shirt','slim','fitted',['#2F4FD1','#3A3D42','#22201E']],
+    [['street','sporty'],'hoodie','slim','fitted',['#0F8A5F','#22201E','#FFFFFF']],
+    [['edgy','bold'],'tee','slim','fitted',['#B7472A','#000000','#000000']],
+    [['soft','earthy'],'coat','skirt','over',['#F1E6CF','#C19A6B','#C19A6B']],
+    [['relaxed','earthy'],'tee','shorts','over',['#D4A017','#6B7A2E','#F1E6CF']],
+    [['classic','minimal'],'coat','straight','fitted',['#22201E','#C9D1DC','#22201E']],
+    [['sporty','bold'],'hoodie','shorts','over',['#D4A017','#000000','#FFFFFF']],
+    [['polished','bold'],'shirt','wide','fitted',['#0F8A5F','#0F8A5F','#F1E6CF']],
+    [['edgy','minimal'],'shirt','straight','over',['#3A3D42','#000000','#000000']],
+    [['street','earthy'],'coat','wide','over',['#4B2E1E','#C19A6B','#FFFFFF']],
+    [['soft','polished'],'shirt','straight','fitted',['#F1E6CF','#A99BD6','#F1E6CF']],
+    [['sporty','minimal'],'tee','slim','fitted',['#FFFFFF','#C9D1DC','#FFFFFF']],
+    [['classic','soft'],'coat','skirt','fitted',['#1F2A48','#F1E6CF','#4B2E1E']]
+  ];
+  const NEUTRALS={
+    warm:[['Cream','#F1E6CF'],['Camel','#C19A6B'],['Chocolate','#4B2E1E']],
+    cool:[['Pure white','#FFFFFF'],['Charcoal','#3A3D42'],['Navy','#1F2A48']],
+    neutral:[['Soft white','#EDE9E3'],['Taupe','#8C8279'],['Black','#000000']]
+  };
+  const DEFAULT_MAIN={warm:[['Olive','#6B7A2E'],['Rust','#B7472A'],['Mustard','#D4A017']],cool:[['Emerald','#0F8A5F'],['Cobalt','#2F4FD1'],['Fuchsia','#C2185B']],neutral:[['Teal','#1F7A7A'],['Dusty rose','#C48B8B'],['Soft red','#C0392B']]};
+  const FIT={
+    'w-hourglass':['Pieces that follow your waist: tucks, belts, wrap styles','Avoid very boxy pieces on top and bottom together','High-rise trousers and fitted tailoring'],
+    'w-pear':['Structured shoulders and detail on top to balance your hips','Darker, simpler bottoms','A-line skirts and wide-leg trousers that skim the hip'],
+    'w-apple':['V-necks and open layers that draw the eye up and down','Fabrics that drape rather than cling','Straight or wide-leg trousers to show off your legs'],
+    'w-rectangle':['Belts, peplums and layers to create a waist','Boxy cuts suit you, so lean into them','Contrast between top and bottom'],
+    'w-inverted':['Wide-leg trousers and full skirts to balance your shoulders','V-necks and soft shoulders','Keep detail and colour on the bottom half'],
+    'm-v':['Fitted tees and knits that show your frame','Straight or relaxed trousers so your legs don\'t look thin','Skip padded shoulders; you don\'t need them'],
+    'm-trapezoid':['Most cuts work; a slim-to-regular fit is your sweet spot','Tuck or half-tuck shirts to show the waist','Structured jackets that end at the hip'],
+    'm-rectangle':['Layers like overshirts and jackets add shape','Structured shoulders build a V','Boxy cuts suit you, so lean into them'],
+    'm-triangle':['Structured jackets and shoulder detail up top','Darker, straight trousers with no taper','Horizontal detail on the chest, plain below'],
+    'm-oval':['Open jackets and long coats for vertical lines','Tonal outfits in one colour family','Straight trousers with a clean hem; avoid clingy knits'],
+    inverted:['Wide-leg and straight trousers to balance your shoulders','V-necks and open collars rather than crew necks','Skip shoulder pads and heavy detail on the shoulders'],
+    triangle:['Structured shoulders and boxy tops to balance your hips','Keep bottoms darker and simpler; put detail on top','Straight or wide-leg trousers that fall cleanly from the hip'],
+    rectangle:['Layers and belts to create shape','Boxy cuts suit you, so lean into them','Contrast in colour or texture between top and bottom'],
+    hourglass:['Pieces that follow your waist: tucks, belts, wrap styles','Avoid very boxy pieces on top and bottom together','High-rise trousers and tailored jackets'],
+    round:['Vertical lines: open jackets, long coats, tonal sets','Fabrics with some structure rather than cling','Straight-leg trousers with a clean hem']
+  };
+  const PROP_TIP={torso:'High-rise bottoms and tucked tops make your legs look longer',even:'Most rises work for you; try a half-tuck to play with proportion',legs:'Mid-rise bottoms and longer tops balance a shorter torso'};
+  const FORMULAS={
+    minimal:'A tonal set in one neutral with clean white sneakers',
+    street:'Oversized hoodie, wide cargos and chunky sneakers',
+    classic:'Crisp shirt, straight trousers and loafers',
+    earthy:'Linen overshirt, relaxed trousers and suede shoes',
+    bold:'One statement colour piece with everything else neutral',
+    soft:'A soft knit with relaxed trousers in muted tones',
+    edgy:'All black with one sharp layer, like leather or a long coat',
+    relaxed:'Boxy tee, wide-leg trousers and slides',
+    polished:'A tailored jacket over a fine knit with pressed trousers',
+    sporty:'Track jacket, straight jeans and retro runners'
+  };
+  // Display prices per currency (set these manually; checkout currency confirmed with Paystack)
+  const PRICES={USD:'$5',NGN:'₦7,500',GBP:'£3.99',EUR:'€4.99',CAD:'CA$6.99',AUD:'A$7.99',GHS:'GH₵65',KES:'KSh 650',ZAR:'R89',INR:'₹449'};
+
+  /* ---------- state ---------- */
+  const blank=()=>({step:0,gender:null,shape:null,prop:null,skin:null,hair:null,vein:null,photo:null,drapeIdx:0,drapeYes:[],drapeNo:[],looks:[]});
+  let S=blank();
+  try{const saved=JSON.parse(localStorage.getItem('sf_state_v2')||'null');if(saved&&typeof saved==='object'){S=Object.assign(blank(),saved);if(S.step===5||S.step===6){/* photo may be too large; keep */}}}catch(e){}
+  const save=()=>{try{localStorage.setItem('sf_state_v2',JSON.stringify(S))}catch(e){try{const c=Object.assign({},S,{photo:null});localStorage.setItem('sf_state_v2',JSON.stringify(c))}catch(e2){}}};
+
+  const $=id=>document.getElementById(id);
+  const screens=[...document.querySelectorAll('.screen')];
+
+  /* ---------- builders ---------- */
+  function shapeSVG(s,g){
+    const [sh,w,h]=s,c=30;
+    const body=g==='w'
+      ? `M${c-sh+3} 22 Q${c} 20 ${c+sh-3} 22 Q${c+sh} 24 ${c+sh} 30 Q${c+w+1} 40 ${c+w} 44 Q${c+h+2} 52 ${c+h} 60 L${c-h} 60 Q${c-h-2} 52 ${c-w} 44 Q${c-w-1} 40 ${c-sh} 30 Q${c-sh} 24 ${c-sh+3} 22 Z`
+      : `M${c-sh+2} 23 L${c+sh-2} 23 Q${c+sh} 24 ${c+sh} 28 L${c+w} 46 L${c+h} 60 L${c-h} 60 L${c-w} 46 L${c-sh} 28 Q${c-sh} 24 ${c-sh+2} 23 Z`;
+    return `<svg width="44" height="72" viewBox="0 0 60 100" aria-hidden="true"><circle cx="30" cy="11" r="7" fill="currentColor" opacity=".85"/>
+      <path d="${body}" fill="currentColor" opacity=".85"/>
+      <rect x="${c-h+2}" y="60" width="${h-3}" height="36" rx="3" fill="currentColor" opacity=".6"/>
+      <rect x="${c+1}" y="60" width="${h-3}" height="36" rx="3" fill="currentColor" opacity=".6"/></svg>`;
+  }
+  function buildShapes(){
+    const el=$('shapeOpts');
+    const shapeBtn=it=>`${shapeSVG(it.s,it.g)}<span><strong>${it.name}</strong><small>${it.d}</small></span>`;
+    if(S.gender==='a'){
+      el.innerHTML='';
+      [['Women\'s shapes',SHAPES_W],['Men\'s shapes',SHAPES_M]].forEach(([h,list])=>{
+        const hd=document.createElement('p');hd.className='group-h';hd.textContent=h;el.appendChild(hd);
+        const box=document.createElement('div');box.className='opts';el.appendChild(box);
+        optButtons(box,list,'shape',shapeBtn,()=>{el.querySelectorAll('.opt').forEach(x=>{if(!box.contains(x))x.setAttribute('aria-pressed','false')})});
+      });
+    } else optButtons(el,S.gender==='m'?SHAPES_M:SHAPES_W,'shape',shapeBtn);
+  }
+  function optButtons(el,items,key,render,after){
+    el.innerHTML='';
+    items.forEach(it=>{
+      const b=document.createElement('button');b.type='button';b.className='opt';
+      b.setAttribute('aria-pressed',S[key]===it.id?'true':'false');
+      b.innerHTML=render(it);
+      b.onclick=()=>{S[key]=it.id;save();[...el.children].forEach(x=>x.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true');if(after)after();renderBar()};
+      el.appendChild(b);
+    });
+  }
+  function lookSVG(L){
+    const [,top,bottom,fit,[ct,cb,cs]]=L; const o=fit==='over';
+    const stroke='stroke="rgba(0,0,0,.18)" stroke-width="1"';
+    let sw=o?30:22, len=top==='coat'?(o?82:78):(o?52:46);
+    let topP=`M${50-sw} 24 Q50 18 ${50+sw} 24 L${50+sw-(o?0:4)} ${len} L${50-sw+(o?0:4)} ${len} Z`;
+    let arms=`<path d="M${50-sw} 24 L${50-sw-10} ${o?58:52} L${50-sw-3} ${o?60:54} L${50-sw+2} 34 Z" fill="${ct}" ${stroke}/><path d="M${50+sw} 24 L${50+sw+10} ${o?58:52} L${50+sw+3} ${o?60:54} L${50+sw-2} 34 Z" fill="${ct}" ${stroke}/>`;
+    let hood=top==='hoodie'?`<path d="M38 24 Q50 8 62 24 Z" fill="${ct}" ${stroke}/>`:'';
+    let collar=top==='shirt'||top==='coat'?`<path d="M44 20 L50 30 L56 20" fill="none" stroke="rgba(0,0,0,.3)" stroke-width="1.2"/>`:'';
+    const by=top==='coat'?len-24:len-2;
+    let bot='';
+    if(bottom==='wide') bot=`<path d="M34 ${by} L66 ${by} L72 132 L53 132 L50 ${by+22} L47 132 L28 132 Z" fill="${cb}" ${stroke}/>`;
+    else if(bottom==='straight') bot=`<path d="M36 ${by} L64 ${by} L65 132 L52 132 L50 ${by+22} L48 132 L35 132 Z" fill="${cb}" ${stroke}/>`;
+    else if(bottom==='slim') bot=`<path d="M37 ${by} L63 ${by} L59 132 L52 132 L50 ${by+22} L48 132 L41 132 Z" fill="${cb}" ${stroke}/>`;
+    else if(bottom==='skirt') bot=`<path d="M37 ${by} L63 ${by} L70 ${by+48} L30 ${by+48} Z" fill="${cb}" ${stroke}/>`;
+    else bot=`<path d="M36 ${by} L64 ${by} L66 ${by+28} L52 ${by+28} L50 ${by+14} L48 ${by+28} L34 ${by+28} Z" fill="${cb}" ${stroke}/>`;
+    const legs=bottom==='skirt'||bottom==='shorts'?`<rect x="41" y="${by+20}" width="7" height="${132-by-20}" fill="rgba(0,0,0,.08)"/><rect x="52" y="${by+20}" width="7" height="${132-by-20}" fill="rgba(0,0,0,.08)"/>`:'';
+    const shoes=`<ellipse cx="41" cy="135" rx="9" ry="4.5" fill="${cs}" ${stroke}/><ellipse cx="59" cy="135" rx="9" ry="4.5" fill="${cs}" ${stroke}/>`;
+    const coatFront=top==='coat'?`<line x1="50" y1="30" x2="50" y2="${len}" stroke="rgba(0,0,0,.2)" stroke-width="1"/>`:'';
+    return `<svg viewBox="0 0 100 142" aria-hidden="true">${legs}${bot}${arms}<path d="${topP}" fill="${ct}" ${stroke}/>${hood}${collar}${coatFront}${shoes}</svg>`;
+  }
+
+  function buildStatic(){
+    const intro=$('introSwatches');
+    ['#4B2E1E','#C19A6B','#F1E6CF','#6B7A2E','#1F2A48','#2F4FD1','#C2185B','#D4A017'].forEach((c,i)=>{const s=document.createElement('span');s.style.background=c;s.style.animationDelay=(i*60)+'ms';s.style.height=(55+((i*37)%45))+'%';s.style.alignSelf='flex-end';intro.appendChild(s)});
+    optButtons($('genderOpts'),GENDERS,'gender',it=>`<span><strong>${it.name}</strong></span>`,()=>{S.shape=null;save();buildShapes()});
+    buildShapes();
+    optButtons($('propOpts'),PROPS,'prop',it=>`<span><strong>${it.name}</strong><small>${it.d}</small></span>`);
+    optButtons($('hairOpts'),HAIRS,'hair',it=>`<span style="width:26px;height:26px;border-radius:50%;background:${it.c};flex:0 0 auto"></span><span>${it.name}</span>`);
+    optButtons($('veinOpts'),VEINS,'vein',it=>`<span style="width:48px;height:10px;border-radius:5px;background:${it.c};flex:0 0 auto"></span><span><strong>${it.name}</strong></span>`);
+    const chips=$('skinChips');
+    SKINS.forEach((c,i)=>{const b=document.createElement('button');b.type='button';b.className='chip';b.style.background=c;b.setAttribute('aria-label','Skin depth '+(i+1)+' of 6');b.setAttribute('aria-pressed',S.skin===i?'true':'false');
+      b.onclick=()=>{S.skin=i;save();[...chips.children].forEach(x=>x.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true');renderBar()};chips.appendChild(b)});
+    const grid=$('lookGrid');
+    LOOKS.forEach((L,i)=>{const b=document.createElement('button');b.type='button';b.className='look';b.setAttribute('aria-label','Outfit '+(i+1));
+      b.setAttribute('aria-pressed',S.looks.includes(i)?'true':'false');
+      b.innerHTML=lookSVG(L)+'<span class="heart" aria-hidden="true">♥</span>';
+      b.onclick=()=>{const k=S.looks.indexOf(i);if(k>-1)S.looks.splice(k,1);else S.looks.push(i);b.setAttribute('aria-pressed',k>-1?'false':'true');save();renderBar()};
+      grid.appendChild(b)});
+  }
+
+  /* ---------- selfie ---------- */
+  $('selfie').addEventListener('change',e=>{
+    const f=e.target.files&&e.target.files[0];if(!f)return;
+    const r=new FileReader();
+    r.onload=()=>{const img=new Image();img.onload=()=>{
+      const size=600,cv=document.createElement('canvas');cv.width=cv.height=size;const ctx=cv.getContext('2d');
+      const m=Math.min(img.width,img.height);ctx.drawImage(img,(img.width-m)/2,(img.height-m)/2*0.6,m,m,0,0,size,size);
+      S.photo=cv.toDataURL('image/jpeg',0.82);S.drapeIdx=0;S.drapeYes=[];S.drapeNo=[];save();go(7);
+    };img.src=r.result};
+    r.readAsDataURL(f);
+  });
+
+  /* ---------- drape ---------- */
+  function renderDrape(){
+    const face=$('face');
+    if(S.photo) face.innerHTML=`<img src="${S.photo}" alt="Your selfie">`;
+    else face.innerHTML=`<div style="width:100%;height:100%;background:${SKINS[S.skin??2]}"></div>`;
+    const d=DRAPES[Math.min(S.drapeIdx,DRAPES.length-1)];
+    $('capePath').setAttribute('fill',d.c);
+    $('capePath').setAttribute('stroke',d.c==='#FFFFFF'?'#D9D5CF':'none');
+    $('drapeName').textContent=d.n;
+    $('drapeCount').textContent=(S.drapeIdx+1)+' of '+DRAPES.length;
+    $('picked').innerHTML=S.drapeYes.map(i=>`<span style="background:${DRAPES[i].c}" title="${DRAPES[i].n}"></span>`).join('');
+  }
+  function drapeAnswer(yes){
+    (yes?S.drapeYes:S.drapeNo).push(S.drapeIdx);
+    const cape=$('cape');cape.style.transform=`translateX(${yes?30:-30}px)`;setTimeout(()=>cape.style.transform='',180);
+    if(S.drapeIdx>=DRAPES.length-1){save();go(8);return}
+    S.drapeIdx++;save();renderDrape();renderBar();
+  }
+  (function swipe(){
+    let x0=null;const m=$('mirror');
+    m.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});
+    m.addEventListener('touchend',e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)>50&&S.step===7)drapeAnswer(dx>0)},{passive:true});
+    document.addEventListener('keydown',e=>{if(S.step!==7)return;if(e.key==='ArrowRight')drapeAnswer(true);if(e.key==='ArrowLeft')drapeAnswer(false)});
+  })();
+
+  /* ---------- results ---------- */
+  function compute(){
+    let score={warm:1,cool:-1,neutral:0}[S.vein]||0;
+    S.drapeYes.forEach(i=>{const t=DRAPES[i].t;if(t==='warm')score+=.5;if(t==='cool')score-=.5});
+    S.drapeNo.forEach(i=>{const t=DRAPES[i].t;if(t==='warm')score-=.25;if(t==='cool')score+=.25});
+    const under=score>.75?'warm':score<-.75?'cool':'neutral';
+    const hairDepth=[0,1.7,3.4,5][S.hair??2];const diff=Math.abs((S.skin??2)-hairDepth);
+    const contrast=diff>=3?'High':diff>=1.5?'Medium':'Low';
+    const counts={};S.looks.forEach(i=>LOOKS[i][0].forEach(v=>counts[v]=(counts[v]||0)+1));
+    const words=Object.keys(counts).sort((a,b)=>counts[b]-counts[a]).slice(0,3);
+    while(words.length<3){const f=['minimal','classic','relaxed'].find(v=>!words.includes(v));words.push(f)}
+    const neutrals=NEUTRALS[under];
+    const liked=S.drapeYes.map(i=>DRAPES[i]).filter(d=>!neutrals.some(n=>n[1]===d.c)&&!['#FFFFFF','#000000','#F1E6CF','#C19A6B','#4B2E1E','#1F2A48','#C9D1DC'].includes(d.c));
+    const good=liked.filter(d=>d.t===under||under==='neutral');
+    const pool=(good.length?good:liked).map(d=>[d.n,d.c]);
+    DEFAULT_MAIN[under].forEach(x=>{if(!pool.some(p=>p[1]===x[1]))pool.push(x)});
+    const main=pool.slice(0,2);const accent=pool.slice(2,4);
+    const fits=[...(FIT[S.shape]||FIT.rectangle),PROP_TIP[S.prop||'even']];
+    const cName=main.map(m=>m[0].toLowerCase()).join(' and ');
+    const forms=words.map(w=>FORMULAS[w]+(w==='bold'?`, like ${main[0][0].toLowerCase()}`:`, in ${cName} or ${neutrals[0][0].toLowerCase()}`));
+    return {under,contrast,words,neutrals,main,accent,fits,forms};
+  }
+  function sw([n,c],role){return `<div class="sw"><i style="background:${c}"></i><small>${n}<em>${role}</em></small></div>`}
+  function renderResults(unlocked){
+    const R=compute();
+    $('t8').innerHTML=R.words.map(w=>`<span>${VIBES[w]}</span>`).join('');
+    $('facts').innerHTML=`<span>${R.under[0].toUpperCase()+R.under.slice(1)} undertone</span><span>${R.contrast} contrast</span><span>${SHAPES.find(s=>s.id===S.shape)?.name||'Rectangle'} shape</span>`;
+    $('paletteFree').innerHTML=sw(R.neutrals[0],'Neutral')+sw(R.main[0],'Main')+sw(R.main[1]||R.neutrals[1],'Main');
+    $('paletteLocked').innerHTML=sw(R.neutrals[1],'Neutral')+sw(R.neutrals[2],'Neutral')+(R.accent.map(a=>sw(a,'Accent')).join(''));
+    $('fitList').innerHTML=R.fits.map(f=>`<li>${f}</li>`).join('');
+    $('formList').innerHTML=R.forms.map(f=>`<li>${f}</li>`).join('');
+    ['palLockWrap','fitWrap','formWrap'].forEach(id=>{
+      const w=$(id),inner=w.firstElementChild,tag=w.querySelector('.lock-tag');
+      inner.classList.toggle('blur',!unlocked);inner.setAttribute('aria-hidden',unlocked?'false':'true');tag.style.display=unlocked?'none':'grid';
+    });
+    $('payBox').style.display=unlocked?'none':'block';
+  }
+
+  /* ---------- currency ---------- */
+  function currency(){
+    let tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}
+    const map={'Africa/Lagos':'NGN','Europe/London':'GBP','Africa/Accra':'GHS','Africa/Nairobi':'KES','Africa/Johannesburg':'ZAR','Asia/Kolkata':'INR','Asia/Calcutta':'INR','America/Toronto':'CAD','America/Vancouver':'CAD','America/Edmonton':'CAD','America/Winnipeg':'CAD','America/Halifax':'CAD'};
+    let cur=map[tz];
+    if(!cur&&tz.startsWith('Australia/'))cur='AUD';
+    if(!cur&&tz.startsWith('Europe/'))cur='EUR';
+    cur=cur||'USD';
+    $('price').textContent=PRICES[cur];
+    $('priceNote').textContent=cur==='USD'||cur==='NGN'?'One-time payment':'One-time payment, charged as $5 USD';
+  }
+
+  /* ---------- navigation ---------- */
+  const PROGRESS=[0,10,22,34,46,58,68,80,92,100];
+  function canNext(){
+    switch(S.step){
+      case 1:return !!S.gender;case 2:return !!S.shape;case 3:return !!S.prop;case 4:return S.skin!==null&&S.hair!==null;
+      case 5:return !!S.vein;case 8:return S.looks.length>=5;default:return true}
+  }
+  function renderBar(){
+    const b=$('barIn');let h='';
+    const back=S.step>0&&S.step<9?'<button class="btn ghost" id="bk">Back</button>':'';
+    if(S.step===0)h='<button class="btn solid" id="nx">Start</button>';
+    else if(S.step===6)h=back+'<button class="btn" id="skipPhoto">Skip, use my skin tone</button>';
+    else if(S.step===7)h='<button class="btn" id="no">Dulls me</button><button class="btn solid" id="yes">Brightens me</button>';
+    else if(S.step===8)h=back+`<button class="btn solid" id="nx" ${canNext()?'':'disabled'}>${S.looks.length<5?`Pick ${5-S.looks.length} more`:'See my results'}</button>`;
+    else if(S.step===9)h='';
+    else h=back+`<button class="btn solid" id="nx" ${canNext()?'':'disabled'}>Continue</button>`;
+    b.innerHTML=h;$('bar').style.display=h?'block':'none';
+    const on=(id,fn)=>{const el=$(id);if(el)el.onclick=fn};
+    on('nx',()=>{if(canNext())go(S.step+1)});
+    on('bk',()=>go(S.step===8?6:S.step-1));
+    on('skipPhoto',()=>{S.photo=null;S.drapeIdx=0;S.drapeYes=[];S.drapeNo=[];go(7)});
+    on('yes',()=>drapeAnswer(true));on('no',()=>drapeAnswer(false));
+  }
+  function go(n){
+    S.step=n;save();
+    screens.forEach(s=>s.classList.toggle('on',+s.dataset.step===n));
+    $('progress').style.width=PROGRESS[n]+'%';
+    if(n===7)renderDrape();
+    if(n===9){renderResults(false);currency()}
+    renderBar();window.scrollTo(0,0);
+  }
+
+  $('unlockBtn').onclick=()=>$('payDialog').showModal();
+  $('closeDialog').onclick=()=>$('payDialog').close();
+  $('previewFull').onclick=()=>{$('payDialog').close();renderResults(true)};
+  $('restart').onclick=()=>{S=blank();save();document.querySelectorAll('[aria-pressed="true"]').forEach(x=>x.setAttribute('aria-pressed','false'));buildShapes();go(0)};
+
+  buildStatic();
+  go(S.step||0);
+})();
+</script>
+</body>
+</html>

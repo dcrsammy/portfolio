@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Adunni Hair Studio · Book & Shop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gloock&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F1ECF4; --surface:#FFFFFF; --ink:#2A1633; --muted:#6F6378; --line:#DDD3E3;
+  --plum:#5B2A63; --plum-soft:#EADCEE; --gold:#9A6B12; --gold-soft:#F4E7C8;
+  --taken:#E7E1EA; --danger:#A3303F;
+  --serif:"Gloock", "Didot", "Bodoni 72", Georgia, serif;
+  --sans:"Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1B1120; --surface:#261A2C; --ink:#F3ECF6; --muted:#B3A6BB; --line:#3C2C44;
+    --plum:#D2A6DB; --plum-soft:#3A2442; --gold:#E3B95E; --gold-soft:#3B2F17;
+    --taken:#302236; --danger:#F08A96;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1B1120; --surface:#261A2C; --ink:#F3ECF6; --muted:#B3A6BB; --line:#3C2C44;
+  --plum:#D2A6DB; --plum-soft:#3A2442; --gold:#E3B95E; --gold-soft:#3B2F17;
+  --taken:#302236; --danger:#F08A96;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--plum);outline-offset:2px}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+
+/* header */
+header{padding:28px 0 8px}
+.brand{font-family:var(--serif);font-weight:400;font-size:clamp(2.6rem,9vw,4.6rem);line-height:.95;letter-spacing:-.01em;margin:0}
+.tag{color:var(--muted);max-width:34em;margin:12px 0 0}
+.next{display:inline-flex;gap:10px;align-items:baseline;margin-top:18px;padding:10px 14px;border-radius:999px;background:var(--gold-soft);color:var(--ink);font-size:.95rem}
+.next b{font-weight:700}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin-top:22px}
+nav .wrap{display:flex;gap:4px;overflow-x:auto}
+nav button{background:none;border:0;padding:14px 12px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap}
+nav button[aria-current="page"]{color:var(--ink);border-bottom-color:var(--plum)}
+nav .cartbtn{margin-left:auto}
+.count{display:inline-block;min-width:20px;padding:0 6px;border-radius:999px;background:var(--plum);color:var(--bg);font-size:.75rem;text-align:center;margin-left:4px}
+
+main{padding:28px 0 80px}
+section[hidden]{display:none}
+h2{font-family:var(--serif);font-weight:400;font-size:2rem;margin:0 0 6px}
+h3{font-size:1rem;margin:0 0 12px;font-weight:700}
+.lede{color:var(--muted);margin:0 0 26px}
+.step{margin:0 0 30px}
+.step h3 span{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--plum);color:var(--bg);font-size:.8rem;margin-right:8px}
+
+/* services */
+.svc-group{margin-bottom:14px}
+.svc-group p{margin:0 0 8px;color:var(--muted);font-size:.9rem}
+.svcs{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.svc{text-align:left;background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:14px 16px}
+.svc strong{display:block;font-size:1.02rem}
+.svc small{display:block;color:var(--muted);margin:2px 0 8px;line-height:1.4}
+.svc em{font-style:normal;font-weight:700;color:var(--gold)}
+.svc[aria-pressed="true"]{border-color:var(--plum);background:var(--plum-soft)}
+
+/* days */
+.days{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x proximity}
+.day{flex:0 0 64px;scroll-snap-align:start;background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:8px 0;text-align:center}
+.day b{display:block;font-family:var(--serif);font-weight:400;font-size:1.6rem;line-height:1.1}
+.day span{font-size:.75rem;color:var(--muted)}
+.day i{display:block;font-style:normal;font-size:.7rem;color:var(--muted);margin-top:2px}
+.day[aria-pressed="true"]{border-color:var(--plum);background:var(--plum-soft)}
+.day:disabled{opacity:.45;cursor:not-allowed}
+.day.full i{color:var(--danger)}
+.owner-tools{margin-top:10px}
+
+/* slots: ticket style */
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.slot{position:relative;background:var(--surface);border:1.5px dashed var(--plum);border-radius:10px;padding:14px 12px;text-align:left}
+.slot b{display:block;font-family:var(--serif);font-weight:400;font-size:1.5rem;line-height:1}
+.slot span{font-size:.8rem;color:var(--muted)}
+.slot::before,.slot::after{content:"";position:absolute;top:50%;width:12px;height:12px;margin-top:-6px;border-radius:50%;background:var(--bg)}
+.slot::before{left:-7px}.slot::after{right:-7px}
+.slot[aria-pressed="true"]{background:var(--plum);color:var(--bg);border-style:solid}
+.slot[aria-pressed="true"] span{color:var(--bg)}
+.slot:disabled{background:var(--taken);border-style:solid;border-color:var(--line);color:var(--muted);cursor:not-allowed}
+.slot:disabled b{text-decoration:line-through}
+.empty{color:var(--muted);padding:14px 0}
+
+/* form */
+.form{display:grid;gap:12px;max-width:520px}
+label{display:grid;gap:4px;font-weight:600;font-size:.9rem}
+input,textarea{background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;font-weight:400;font-size:1rem;width:100%}
+textarea{min-height:80px;resize:vertical}
+.summary{background:var(--surface);border-left:4px solid var(--gold);border-radius:6px;padding:12px 14px;margin:6px 0 4px;max-width:520px}
+.btn{background:var(--plum);color:var(--bg);border:0;border-radius:999px;padding:13px 22px;font-weight:700}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.ghost{background:none;color:var(--plum);border:1.5px solid var(--plum)}
+.btn.small{padding:7px 14px;font-size:.85rem}
+.btn.danger{background:none;color:var(--danger);border:1.5px solid var(--danger)}
+.note{font-size:.85rem;color:var(--muted);margin:6px 0 0}
+
+/* shop */
+.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.product{background:var(--surface);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.art{aspect-ratio:4/3;display:grid;place-items:center;color:var(--plum)}
+.art svg{width:44%;height:auto}
+.product .body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:4px;flex:1}
+.product h4{margin:0;font-size:1.02rem}
+.product p{margin:0;color:var(--muted);font-size:.88rem;flex:1}
+.product .row{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.price{font-weight:700;color:var(--gold)}
+
+/* cart */
+.cart-line{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--line);background:var(--surface)}
+.total{display:flex;justify-content:space-between;font-weight:700;padding:14px 0;font-size:1.1rem}
+
+/* lists */
+.list{display:grid;gap:10px}
+.item{background:var(--surface);border-radius:14px;padding:14px 16px;display:grid;gap:4px}
+.item .top{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+.item .when{font-family:var(--serif);font-size:1.25rem}
+.item .meta{color:var(--muted);font-size:.9rem}
+.badge{font-size:.75rem;font-weight:700;padding:2px 10px;border-radius:999px;background:var(--plum-soft);color:var(--plum)}
+.badge.off{background:var(--taken);color:var(--muted)}
+.badge.done{background:var(--gold-soft);color:var(--gold)}
+.subnav{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.subnav button{background:var(--surface);border:1.5px solid var(--line);border-radius:999px;padding:7px 14px;font-weight:600;font-size:.9rem}
+.subnav button[aria-pressed="true"]{border-color:var(--plum);background:var(--plum-soft)}
+.banner{background:var(--gold-soft);border-radius:12px;padding:12px 14px;margin-bottom:20px;font-size:.92rem}
+.banner[hidden]{display:none}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:12px;max-width:90vw;transition:.25s;pointer-events:none;z-index:20}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.confirm{background:var(--plum-soft);border-radius:16px;padding:18px 20px;max-width:520px}
+.confirm h3{font-family:var(--serif);font-weight:400;font-size:1.5rem;margin:0 0 6px}
+@media (prefers-reduced-motion: reduce){.toast{transition:none}}
+</style>
+</head>
+<body>
+<header class="wrap">
+  <h1 class="brand" id="brand">Adunni Hair Studio</h1>
+  <p class="tag" id="tagline">Braids, installs, ponytails and revamps. One chair and fixed times, so your slot is yours alone.</p>
+  <div class="next" id="nextOpen">Checking the calendar…</div>
+</header>
+
+<nav aria-label="Sections">
+  <div class="wrap">
+    <button data-view="book" aria-current="page">Book</button>
+    <button data-view="shop">Shop</button>
+    <button data-view="mine">My bookings</button>
+    <button data-view="manage" id="manageTab" hidden>Manage</button>
+    <button data-view="cart" class="cartbtn">Cart<span class="count" id="cartCount">0</span></button>
+  </div>
+</nav>
+
+<main class="wrap">
+  <div class="banner" id="banner" hidden></div>
+
+  <!-- BOOK -->
+  <section id="view-book">
+    <h2>Book a chair</h2>
+    <p class="lede">Choose what you're coming in for, then pick an open time. Booked times disappear for everyone the moment they're taken.</p>
+
+    <div class="step">
+      <h3><span>1</span>What are you booking?</h3>
+      <div id="services"></div>
+    </div>
+
+    <div class="step">
+      <h3><span>2</span>Pick a day</h3>
+      <div class="days" id="days" role="group" aria-label="Days"></div>
+      <div class="owner-tools" id="ownerDayTools" hidden></div>
+    </div>
+
+    <div class="step">
+      <h3><span>3</span>Pick a time</h3>
+      <div class="slots" id="slots" role="group" aria-label="Times"></div>
+    </div>
+
+    <div class="step" id="detailsStep">
+      <h3><span>4</span>Your details</h3>
+      <div class="form">
+        <label>Full name<input id="bName" autocomplete="name"></label>
+        <label>Phone or WhatsApp<input id="bPhone" type="tel" autocomplete="tel"></label>
+        <label>Notes for your stylist (optional)<textarea id="bNotes" placeholder="Length, colour, inspiration, anything we should know"></textarea></label>
+        <div class="summary" id="summary">Choose a service, day and time.</div>
+        <div><button class="btn" id="bookBtn" disabled>Book this slot</button></div>
+      </div>
+    </div>
+    <div id="bookDone"></div>
+  </section>
+
+  <!-- SHOP -->
+  <section id="view-shop" hidden>
+    <h2>Shop</h2>
+    <p class="lede">Hair and care products from the studio. Add to cart and place your order; we'll confirm delivery or pickup with you.</p>
+    <div class="products" id="products"></div>
+  </section>
+
+  <!-- CART -->
+  <section id="view-cart" hidden>
+    <h2>Your cart</h2>
+    <div id="cartBody"></div>
+  </section>
+
+  <!-- MINE -->
+  <section id="view-mine" hidden>
+    <h2>My bookings</h2>
+    <p class="lede">Your upcoming appointments and orders.</p>
+    <div class="list" id="mineList"></div>
+  </section>
+
+  <!-- MANAGE -->
+  <section id="view-manage" hidden>
+    <h2>Manage</h2>
+    <p class="lede">Only you see this. Bookings, orders and closed days update live.</p>
+    <div class="subnav" id="manageNav">
+      <button data-m="bookings" aria-pressed="true">Bookings</button>
+      <button data-m="orders" aria-pressed="false">Orders</button>
+      <button data-m="closed" aria-pressed="false">Closed days</button>
+    </div>
+    <div class="list" id="manageList"></div>
+  </section>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ============ EDIT YOUR STUDIO HERE ============ */
+const STUDIO = {
+  name: "Adunni Hair Studio",
+  currency: "₦",
+  whatsapp: "",                 // e.g. "2348012345678" — used as a fallback if someone can't book in-app
+  times: ["09:00","11:30","14:00","16:30"], // fixed slots, one client each
+  closedWeekdays: [0],          // 0 = Sunday
+  daysAhead: 30
+};
+const SERVICES = [
+  {group:"Hair", id:"braids",       name:"Braids",       price:25000, desc:"Knotless, box braids, cornrows, twists"},
+  {group:"Hair", id:"installation", name:"Installation", price:20000, desc:"Wig or frontal install, customised to your hairline"},
+  {group:"Hair", id:"ponytail",     name:"Ponytail",     price:15000, desc:"Sleek or braided ponytail with extensions"},
+  {group:"Hair", id:"revamp",       name:"Hair revamp",  price:18000, desc:"Wash, treat and restyle a wig or unit"},
+  {group:"Consultation", id:"consultation", name:"Consultation", price:5000, desc:"Talk through your hair goals and a plan"},
+  {group:"Styling", id:"styling",   name:"Styling",      price:12000, desc:"Styling for events, shoots and weddings"}
+];
+const PRODUCTS = [
+  {id:"p1", name:"Bone straight bundle, 18\"", price:65000, desc:"Double drawn, holds a curl, lasts with care.", kind:"bundle", tint:"#EADCEE"},
+  {id:"p2", name:"Body wave frontal wig",      price:145000,desc:"13x4 HD lace, pre-plucked, ready to install.", kind:"bundle", tint:"#F4E7C8"},
+  {id:"p3", name:"Scalp oil",                  price:9500,  desc:"Light blend for braids and protective styles.", kind:"bottle", tint:"#E3EEE6"},
+  {id:"p4", name:"Edge control",               price:6000,  desc:"Firm hold without flaking.", kind:"jar", tint:"#F6E0E4"},
+  {id:"p5", name:"Satin bonnet",               price:5500,  desc:"Double layered, adjustable band.", kind:"bonnet", tint:"#E1E4F4"},
+  {id:"p6", name:"Wide-tooth comb",            price:3000,  desc:"Detangles wigs and natural hair gently.", kind:"comb", tint:"#EFE8DE"}
+];
+/* ================================================ */
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money = n => STUDIO.currency + Number(n).toLocaleString("en-NG");
+const pad = n => String(n).padStart(2,"0");
+const iso = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const slotId = (date,time) => `${date}_${time.replace(":","")}`;
+const svcById = id => SERVICES.find(s => s.id === id);
+const fmt12 = t => { const [h,m] = t.split(":").map(Number); return `${((h+11)%12)+1}:${pad(m)} ${h<12?"am":"pm"}`; };
+const fmtDay = ds => new Date(ds+"T00:00").toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"});
+const newId = () => Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+
+const S = {
+  db:null, userCap:null, uid:null, isOwner:false, readOnly:false, dbReady:false,
+  slots:{}, blocked:[], svc:null, date:null, time:null,
+  cart:{}, mine:{}, myOrders:{}, allBookings:[], allOrders:[], manageTab:"bookings", busy:false
+};
+
+document.title = STUDIO.name + " · Book & Shop";
+$("#brand").textContent = STUDIO.name;
+
+/* ---------- storage (cart only) ---------- */
+try { S.cart = JSON.parse(localStorage.getItem("cart") || "{}") || {}; } catch(e) { S.cart = {}; }
+function saveCart(){ try { localStorage.setItem("cart", JSON.stringify(S.cart)); } catch(e){} }
+
+/* ---------- toast ---------- */
+let toastT;
+function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("show"),3200); }
+
+/* ---------- navigation ---------- */
+function show(view){
+  document.querySelectorAll("nav button").forEach(b => { if(b.dataset.view===view) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current"); });
+  ["book","shop","cart","mine","manage"].forEach(v => $("#view-"+v).hidden = v!==view);
+  if(view==="cart") renderCart();
+  if(view==="mine") renderMine();
+  if(view==="manage") renderManage();
+  window.scrollTo({top:0});
+}
+document.querySelectorAll("nav button").forEach(b => b.addEventListener("click", () => show(b.dataset.view)));
+
+/* ---------- days & slots ---------- */
+function days(){
+  const out=[], d=new Date(); d.setHours(0,0,0,0);
+  for(let i=0;i<STUDIO.daysAhead;i++){ const x=new Date(d); x.setDate(d.getDate()+i); out.push(x); }
+  return out;
+}
+function dayClosed(ds){
+  const wd = new Date(ds+"T00:00").getDay();
+  return STUDIO.closedWeekdays.includes(wd) || S.blocked.includes(ds);
+}
+function timeState(ds,t){
+  if(dayClosed(ds)) return "closed";
+  const now=new Date();
+  if(ds===iso(now)){ const [h,m]=t.split(":").map(Number); if(h*60+m <= now.getHours()*60+now.getMinutes()) return "past"; }
+  const s=S.slots[slotId(ds,t)];
+  if(s && s.taken) return "booked";
+  return "open";
+}
+function openCount(ds){ return STUDIO.times.filter(t => timeState(ds,t)==="open").length; }
+
+function renderServices(){
+  const groups=[...new Set(SERVICES.map(s=>s.group))];
+  $("#services").innerHTML = groups.map(g => `
+    <div class="svc-group"><p>${esc(g)}</p><div class="svcs">
+      ${SERVICES.filter(s=>s.group===g).map(s=>`
+        <button class="svc" data-id="${s.id}" aria-pressed="${S.svc===s.id}">
+          <strong>${esc(s.name)}</strong><small>${esc(s.desc)}</small><em>from ${money(s.price)}</em>
+        </button>`).join("")}
+    </div></div>`).join("");
+  $("#services").querySelectorAll(".svc").forEach(b => b.onclick = () => { S.svc=b.dataset.id; renderServices(); renderSummary(); });
+}
+
+function renderDays(){
+  $("#days").innerHTML = days().map(d => {
+    const ds=iso(d), closed=dayClosed(ds), n=closed?0:openCount(ds);
+    const label = closed ? "Closed" : (S.dbReady ? (n ? `${n} open` : "Full") : "");
+    return `<button class="day ${!closed&&S.dbReady&&!n?"full":""}" data-d="${ds}" aria-pressed="${S.date===ds}" ${closed&&!S.isOwner?"disabled":""}>
+      <span>${d.toLocaleDateString("en-GB",{weekday:"short"})}</span><b>${d.getDate()}</b><span>${d.toLocaleDateString("en-GB",{month:"short"})}</span><i>${label}</i></button>`;
+  }).join("");
+  $("#days").querySelectorAll(".day").forEach(b => b.onclick = () => { S.date=b.dataset.d; S.time=null; renderDays(); renderSlots(); renderSummary(); });
+  renderOwnerDayTools();
+}
+
+function renderSlots(){
+  const el=$("#slots");
+  if(!S.date){ el.innerHTML=`<p class="empty">Pick a day to see open times.</p>`; return; }
+  if(dayClosed(S.date)){ el.innerHTML=`<p class="empty">The studio is closed on ${fmtDay(S.date)}.</p>`; return; }
+  el.innerHTML = STUDIO.times.map(t => {
+    const st=timeState(S.date,t);
+    const word = st==="open" ? "Open" : st==="booked" ? "Booked" : "Passed";
+    return `<button class="slot" data-t="${t}" aria-pressed="${S.time===t}" ${st!=="open"?"disabled":""}><b>${fmt12(t)}</b><span>${word}</span></button>`;
+  }).join("");
+  el.querySelectorAll(".slot").forEach(b => b.onclick = () => { S.time=b.dataset.t; renderSlots(); renderSummary(); });
+  if(S.time && timeState(S.date,S.time)!=="open"){ S.time=null; toast("That time was just taken. Pick another."); renderSlots(); renderSummary(); }
+}
+
+function renderSummary(){
+  const s=svcById(S.svc);
+  const parts=[];
+  if(s) parts.push(`<b>${esc(s.name)}</b> · from ${money(s.price)}`);
+  if(S.date) parts.push(fmtDay(S.date));
+  if(S.time) parts.push(fmt12(S.time));
+  $("#summary").innerHTML = parts.length ? parts.join("<br>") : "Choose a service, day and time.";
+  $("#bookBtn").disabled = !(s && S.date && S.time) || S.busy;
+  $("#bookBtn").textContent = S.readOnly || !S.db ? (STUDIO.whatsapp ? "Request on WhatsApp" : "Book this slot") : "Book this slot";
+}
+
+function renderNextOpen(){
+  if(!S.dbReady){ return; }
+  for(const d of days()){
+    const ds=iso(d);
+    for(const t of STUDIO.times){ if(timeState(ds,t)==="open"){ $("#nextOpen").innerHTML=`Next open chair <b>${fmtDay(ds)}, ${fmt12(t)}</b>`; return; } }
+  }
+  $("#nextOpen").textContent="Fully booked for the next " + STUDIO.daysAhead + " days";
+}
+
+function renderOwnerDayTools(){
+  const el=$("#ownerDayTools");
+  if(!S.isOwner || !S.date){ el.hidden=true; return; }
+  const wd=new Date(S.date+"T00:00").getDay();
+  if(STUDIO.closedWeekdays.includes(wd)){ el.hidden=false; el.innerHTML=`<p class="note">This weekday is always closed. Change it in the settings at the top of the code.</p>`; return; }
+  const blocked=S.blocked.includes(S.date);
+  el.hidden=false;
+  el.innerHTML=`<button class="btn ghost small" id="toggleDay">${blocked?"Reopen":"Close"} ${fmtDay(S.date)}</button>`;
+  $("#toggleDay").onclick = () => toggleDay(S.date);
+}
+
+/* ---------- booking (slot claim with lease, no double booking) ---------- */
+async function book(){
+  const s=svcById(S.svc), name=$("#bName").value.trim(), phone=$("#bPhone").value.trim(), notes=$("#bNotes").value.trim();
+  if(!name || !phone){ toast("Add your name and phone number."); return; }
+
+  if(!S.db || S.readOnly){
+    if(STUDIO.whatsapp){
+      const msg=`Hi, I'd like to book ${s.name} on ${fmtDay(S.date)} at ${fmt12(S.time)}. Name: ${name}. Phone: ${phone}.${notes?" Notes: "+notes:""}`;
+      window.open(`https://wa.me/${STUDIO.whatsapp}?text=${encodeURIComponent(msg)}`,"_blank");
+    } else toast("Booking is switched off in this demo.");
+    return;
+  }
+
+  S.busy=true; renderSummary(); $("#bookBtn").textContent="Holding your slot…";
+  const sid=slotId(S.date,S.time), ref=S.db.doc("slots/"+sid), bookingId=newId();
+  try{
+    const lease=await ref.acquire({holder:S.uid, ttlMs:8000});
+    if(!lease.acquired) throw {code:"taken"};
+    const cur=await ref.get();
+    if(cur.exists && cur.data().taken) throw {code:"taken"};
+    await ref.set({taken:true, date:S.date, time:S.time, service:S.svc, by:S.uid, bookingId, at:Date.now()});
+
+    const item={slotId:sid, date:S.date, time:S.time, service:S.svc, name, phone, notes, status:"booked", at:Date.now()};
+    const mref=S.db.doc("bookings/"+S.uid);
+    const mine=await mref.get();
+    if(mine.exists) await mref.update({items:{[bookingId]:item}});
+    else await mref.set({items:{[bookingId]:item}});
+
+    $("#bookDone").innerHTML=`<div class="confirm"><h3>You're booked</h3><p>${esc(s.name)} on ${fmtDay(S.date)} at ${fmt12(S.time)}. This slot is now closed to everyone else.</p><button class="btn ghost small" id="seeMine">See my bookings</button></div>`;
+    $("#seeMine").onclick=()=>show("mine");
+    toast("Booked for "+fmtDay(S.date)+", "+fmt12(S.time));
+    S.time=null; $("#bNotes").value="";
+    renderSlots(); renderDays();
+    $("#bookDone").scrollIntoView({behavior:"smooth",block:"center"});
+  }catch(e){
+    if(e && e.code==="taken"){ toast("Someone just booked that time. Pick another."); S.time=null; renderSlots(); }
+    else if(e && e.code==="invalid_argument"){ setReadOnly(); toast("This view can see times but can't book."); }
+    else toast("Booking didn't go through. Check your connection and try again.");
+  }finally{ S.busy=false; renderSummary(); }
+}
+$("#bookBtn").onclick=book;
+
+async function cancelBooking(ownerUid, id, item){
+  if(!confirm(`Cancel ${svcById(item.service)?.name||"booking"} on ${fmtDay(item.date)} at ${fmt12(item.time)}?`)) return;
+  try{
+    const sref=S.db.doc("slots/"+item.slotId);
+    const s=await sref.get();
+    if(s.exists && s.data().bookingId===id) await sref.delete();
+    await S.db.doc("bookings/"+ownerUid).update({items:{[id]:{status:"cancelled"}}});
+    toast("Cancelled. That time is open again.");
+  }catch(e){ toast("Couldn't cancel. Try again."); }
+}
+
+async function toggleDay(ds){
+  const next = S.blocked.includes(ds) ? S.blocked.filter(x=>x!==ds) : [...S.blocked, ds].sort();
+  try{ await S.db.doc("config/blocked").set({dates:next}); toast(S.blocked.includes(ds)?"Day reopened":"Day closed"); }
+  catch(e){ toast("Couldn't update the day."); }
+}
+
+/* ---------- shop ---------- */
+const ART = {
+  bottle:`<svg viewBox="0 0 60 80" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="24" y="4" width="12" height="10" rx="2"/><path d="M22 14h16v6l6 8v44a4 4 0 0 1-4 4H20a4 4 0 0 1-4-4V28l6-8z"/><path d="M16 44h28"/></svg>`,
+  jar:`<svg viewBox="0 0 70 60" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="10" y="6" width="50" height="12" rx="3"/><path d="M12 18h46v30a6 6 0 0 1-6 6H18a6 6 0 0 1-6-6z"/><path d="M22 34h26"/></svg>`,
+  bundle:`<svg viewBox="0 0 60 80" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6h24"/><path d="M20 6c-6 18 6 26 0 44s4 20 2 24"/><path d="M30 6c-6 18 6 26 0 44s4 20 2 24"/><path d="M40 6c-6 18 6 26 0 44s4 20 2 24"/></svg>`,
+  bonnet:`<svg viewBox="0 0 80 60" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 44C8 20 24 8 40 8s32 12 32 36"/><path d="M4 44h72v6H4z"/><path d="M24 20c4 6 4 14 0 22M40 14v28M56 20c-4 6-4 14 0 22"/></svg>`,
+  comb:`<svg viewBox="0 0 80 50" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="6" y="8" width="68" height="12" rx="3"/><path d="M14 20v22M24 20v22M34 20v22M44 20v22M54 20v22M64 20v22"/></svg>`
+};
+function renderShop(){
+  $("#products").innerHTML = PRODUCTS.map(p => `
+    <article class="product">
+      <div class="art" style="background:${p.tint}">${ART[p.kind]||ART.jar}</div>
+      <div class="body"><h4>${esc(p.name)}</h4><p>${esc(p.desc)}</p>
+        <div class="row"><span class="price">${money(p.price)}</span><button class="btn small" data-add="${p.id}">Add to cart</button></div>
+      </div>
+    </article>`).join("");
+  $("#products").querySelectorAll("[data-add]").forEach(b => b.onclick = () => { S.cart[b.dataset.add]=(S.cart[b.dataset.add]||0)+1; saveCart(); renderCartCount(); toast("Added to cart"); });
+}
+function cartLines(){ return Object.entries(S.cart).filter(([id,q])=>q>0 && PRODUCTS.find(p=>p.id===id)).map(([id,q])=>({p:PRODUCTS.find(p=>p.id===id), q})); }
+function renderCartCount(){ $("#cartCount").textContent = cartLines().reduce((a,l)=>a+l.q,0); }
+function renderCart(){
+  const lines=cartLines(), el=$("#cartBody");
+  if(!lines.length){ el.innerHTML=`<p class="empty">Your cart is empty.</p><button class="btn ghost" id="toShop">Browse the shop</button>`; $("#toShop").onclick=()=>show("shop"); return; }
+  const total=lines.reduce((a,l)=>a+l.p.price*l.q,0);
+  el.innerHTML = lines.map(l=>`
+    <div class="cart-line"><div><b>${esc(l.p.name)}</b><div class="note">${money(l.p.price)} each</div></div>
+      <div class="qty"><button data-dec="${l.p.id}" aria-label="Remove one">−</button><span>${l.q}</span><button data-inc="${l.p.id}" aria-label="Add one">+</button></div></div>`).join("")
+    + `<div class="total"><span>Total</span><span>${money(total)}</span></div>
+    <div class="form">
+      <label>Full name<input id="oName" autocomplete="name"></label>
+      <label>Phone or WhatsApp<input id="oPhone" type="tel" autocomplete="tel"></label>
+      <label>Delivery address, or write "pickup"<textarea id="oAddr"></textarea></label>
+      <div><button class="btn" id="orderBtn">Place order</button></div>
+      <p class="note">We'll message you to confirm payment and delivery.</p>
+    </div>`;
+  el.querySelectorAll("[data-inc]").forEach(b=>b.onclick=()=>{S.cart[b.dataset.inc]++;saveCart();renderCart();renderCartCount();});
+  el.querySelectorAll("[data-dec]").forEach(b=>b.onclick=()=>{S.cart[b.dataset.dec]--; if(S.cart[b.dataset.dec]<=0) delete S.cart[b.dataset.dec]; saveCart();renderCart();renderCartCount();});
+  $("#orderBtn").onclick=()=>placeOrder(lines,total);
+}
+async function placeOrder(lines,total){
+  const name=$("#oName").value.trim(), phone=$("#oPhone").value.trim(), addr=$("#oAddr").value.trim();
+  if(!name||!phone||!addr){ toast("Add your name, phone and address."); return; }
+  const summary=lines.map(l=>`${l.q} × ${l.p.name}`).join(", ");
+  if(!S.db || S.readOnly){
+    if(STUDIO.whatsapp){ window.open(`https://wa.me/${STUDIO.whatsapp}?text=${encodeURIComponent(`Hi, I'd like to order: ${summary}. Total ${money(total)}. Name: ${name}. Phone: ${phone}. Address: ${addr}`)}`,"_blank"); }
+    else toast("Ordering is switched off in this demo.");
+    return;
+  }
+  const btn=$("#orderBtn"); btn.disabled=true; btn.textContent="Placing order…";
+  try{
+    const id=newId(), item={lines:lines.map(l=>({id:l.p.id,name:l.p.name,price:l.p.price,q:l.q})), total, name, phone, addr, status:"new", at:Date.now()};
+    const ref=S.db.doc("orders/"+S.uid), cur=await ref.get();
+    if(cur.exists) await ref.update({items:{[id]:item}}); else await ref.set({items:{[id]:item}});
+    S.cart={}; saveCart(); renderCartCount();
+    $("#cartBody").innerHTML=`<div class="confirm"><h3>Order placed</h3><p>${esc(summary)}. Total ${money(total)}. We'll be in touch on ${esc(phone)}.</p></div>`;
+  }catch(e){
+    btn.disabled=false; btn.textContent="Place order";
+    if(e && e.code==="invalid_argument"){ setReadOnly(); toast("This view can't place orders."); } else toast("Order didn't go through. Try again.");
+  }
+}
+
+/* ---------- my bookings ---------- */
+function renderMine(){
+  const el=$("#mineList");
+  if(!S.db){ el.innerHTML=`<p class="empty">Sign in to see your bookings.</p>`; return; }
+  const today=iso(new Date());
+  const bks=Object.entries(S.mine).map(([id,b])=>({id,...b})).filter(b=>b.date>=today).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+  const ords=Object.entries(S.myOrders).map(([id,o])=>({id,...o})).sort((a,b)=>b.at-a.at);
+  if(!bks.length && !ords.length){ el.innerHTML=`<p class="empty">Nothing booked yet.</p><div><button class="btn" id="goBook">Book a chair</button></div>`; $("#goBook").onclick=()=>show("book"); return; }
+  el.innerHTML = bks.map(b=>`
+    <div class="item"><div class="top"><span class="when">${fmtDay(b.date)}, ${fmt12(b.time)}</span>
+      <span class="badge ${b.status==="cancelled"?"off":""}">${b.status==="cancelled"?"Cancelled":"Booked"}</span></div>
+      <div class="meta">${esc(svcById(b.service)?.name||b.service)}</div>
+      ${b.status!=="cancelled"?`<div><button class="btn danger small" data-cancel="${b.id}">Cancel</button></div>`:""}
+    </div>`).join("")
+  + ords.map(o=>`
+    <div class="item"><div class="top"><span class="when">Order · ${money(o.total)}</span>
+      <span class="badge ${o.status==="fulfilled"?"done":""}">${o.status==="fulfilled"?"Fulfilled":"Received"}</span></div>
+      <div class="meta">${esc((o.lines||[]).map(l=>`${l.q} × ${l.name}`).join(", "))}</div></div>`).join("");
+  el.querySelectorAll("[data-cancel]").forEach(b=>b.onclick=()=>cancelBooking(S.uid, b.dataset.cancel, S.mine[b.dataset.cancel]));
+}
+
+/* ---------- manage (owner) ---------- */
+$("#manageNav").querySelectorAll("button").forEach(b=>b.onclick=()=>{ S.manageTab=b.dataset.m; $("#manageNav").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x===b)); renderManage(); });
+function renderManage(){
+  if(!S.isOwner) return;
+  const el=$("#manageList"), today=iso(new Date());
+  if(S.manageTab==="bookings"){
+    const list=S.allBookings.filter(b=>b.date>=today && b.status!=="cancelled").sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+    if(!list.length){ el.innerHTML=`<p class="empty">No upcoming bookings yet.</p>`; return; }
+    el.innerHTML=list.map((b,i)=>`
+      <div class="item"><div class="top"><span class="when">${fmtDay(b.date)}, ${fmt12(b.time)}</span><span class="badge">${esc(svcById(b.service)?.name||b.service)}</span></div>
+        <div><b>${esc(b.name)}</b> · <a href="tel:${esc(b.phone)}">${esc(b.phone)}</a></div>
+        ${b.notes?`<div class="meta">${esc(b.notes)}</div>`:""}
+        <div><button class="btn danger small" data-i="${i}">Cancel booking</button></div></div>`).join("");
+    el.querySelectorAll("[data-i]").forEach(btn=>btn.onclick=()=>{ const b=list[btn.dataset.i]; cancelBooking(b.owner,b.id,b); });
+  } else if(S.manageTab==="orders"){
+    const list=[...S.allOrders].sort((a,b)=>b.at-a.at);
+    if(!list.length){ el.innerHTML=`<p class="empty">No orders yet.</p>`; return; }
+    el.innerHTML=list.map((o,i)=>`
+      <div class="item"><div class="top"><span class="when">${money(o.total)}</span><span class="badge ${o.status==="fulfilled"?"done":""}">${o.status==="fulfilled"?"Fulfilled":"New"}</span></div>
+        <div><b>${esc(o.name)}</b> · <a href="tel:${esc(o.phone)}">${esc(o.phone)}</a></div>
+        <div class="meta">${esc((o.lines||[]).map(l=>`${l.q} × ${l.name}`).join(", "))}</div>
+        <div class="meta">${esc(o.addr)}</div>
+        ${o.status!=="fulfilled"?`<div><button class="btn ghost small" data-f="${i}">Mark fulfilled</button></div>`:""}</div>`).join("");
+    el.querySelectorAll("[data-f]").forEach(btn=>btn.onclick=async()=>{ const o=list[btn.dataset.f]; try{ await S.db.doc("orders/"+o.owner).update({items:{[o.id]:{status:"fulfilled"}}}); toast("Marked fulfilled"); }catch(e){ toast("Couldn't update the order."); } });
+  } else {
+    const list=S.blocked.filter(d=>d>=today);
+    el.innerHTML=(list.length?list.map(d=>`<div class="item"><div class="top"><span class="when">${fmtDay(d)}</span><button class="btn ghost small" data-d="${d}">Reopen</button></div></div>`).join(""):`<p class="empty">No extra closed days. To close one, pick it on the Book tab and tap Close.</p>`);
+    el.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>toggleDay(b.dataset.d));
+  }
+}
+
+function setReadOnly(){
+  S.readOnly=true;
+  const b=$("#banner"); b.hidden=false;
+  b.textContent = STUDIO.whatsapp ? "You can see live availability here. Booking and orders will open in WhatsApp." : "This is a demo preview. Booking and orders are switched off.";
+  renderSummary();
+}
+
+/* ---------- initial render ---------- */
+renderServices(); renderDays(); renderSlots(); renderSummary(); renderShop(); renderCartCount();
+
+/* ---------- connect live data ---------- */
+(async () => {
+  const use = window.claude && window.claude.use;
+  if(!use){ $("#nextOpen").textContent="This is a demo, so live availability is switched off."; setReadOnly(); return; }
+  const [db, user] = await Promise.all([window.claude.use("db"), window.claude.use("user")]);
+  S.db=db; S.userCap=user;
+  if(!db){ $("#nextOpen").textContent="Sign in to see live availability."; setReadOnly(); return; }
+  if(user){
+    S.uid = await user.id();
+    S.isOwner = await user.isOwner();
+    const w = await user.can("data.write");
+    if(w===false || !S.uid) setReadOnly();
+  }
+  if(S.isOwner) $("#manageTab").hidden=false;
+
+  const today=iso(new Date());
+  db.collection("slots").where("date",">=",today).onSnapshot(snap=>{
+    S.slots={}; snap.docs.forEach(d=>S.slots[d.id]=d.data());
+    S.dbReady=true; renderDays(); renderSlots(); renderNextOpen();
+  }, ()=>{});
+  db.doc("config/blocked").onSnapshot(s=>{
+    S.blocked = s.exists ? (s.data().dates||[]) : [];
+    renderDays(); renderSlots(); renderNextOpen(); if(S.isOwner && S.manageTab==="closed") renderManage();
+  }, ()=>{});
+  if(S.uid){
+    db.doc("bookings/"+S.uid).onSnapshot(s=>{ S.mine = s.exists ? (s.data().items||{}) : {}; if(!$("#view-mine").hidden) renderMine(); }, ()=>{});
+    db.doc("orders/"+S.uid).onSnapshot(s=>{ S.myOrders = s.exists ? (s.data().items||{}) : {}; if(!$("#view-mine").hidden) renderMine(); }, ()=>{});
+  }
+  if(S.isOwner){
+    db.collection("bookings").onSnapshot(snap=>{
+      S.allBookings=[]; snap.docs.forEach(d=>Object.entries(d.data().items||{}).forEach(([id,b])=>S.allBookings.push({...b,id,owner:d.id})));
+      if(!$("#view-manage").hidden) renderManage();
+    }, ()=>{});
+    db.collection("orders").onSnapshot(snap=>{
+      S.allOrders=[]; snap.docs.forEach(d=>Object.entries(d.data().items||{}).forEach(([id,o])=>S.allOrders.push({...o,id,owner:d.id})));
+      if(!$("#view-manage").hidden) renderManage();
+    }, ()=>{});
+  }
+  renderSummary();
+})();
+</script>
+</body>
+</html>
