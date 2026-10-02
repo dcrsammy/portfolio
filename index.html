@@ -1,794 +1,250 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Akomolafe Olawale — Developer & Builder</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg:        #fafaf8;
-      --bg2:       #f4f3f0;
-      --surface:   #ffffff;
-      --border:    #e8e6e0;
-      --border2:   #d4d0c8;
-      --text:      #1a1a18;
-      --muted:     #6b6b65;
-      --soft:      #4a4a44;
-      --accent:    #2563eb;
-      --accent-h:  #1d4ed8;
-      --green:     #16a34a;
-      --orange:    #ea580c;
-      --sans:      'Inter', sans-serif;
-      --serif:     'Playfair Display', serif;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--sans);
-      font-size: 15px;
-      line-height: 1.6;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 3rem;
-      background: rgba(250,250,248,0.92);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .nav-logo {
-      font-size: 0.92rem;
-      font-weight: 600;
-      color: var(--text);
-      letter-spacing: -0.01em;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2.5rem;
-      list-style: none;
-      align-items: center;
-    }
-
-    .nav-links a {
-      font-size: 0.82rem;
-      font-weight: 500;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color 0.15s;
-    }
-
-    .nav-links a:hover { color: var(--text); }
-
-    .nav-cta {
-      background: var(--text) !important;
-      color: var(--bg) !important;
-      padding: 0.45rem 1.1rem;
-      border-radius: 6px;
-      font-weight: 600 !important;
-    }
-
-    .nav-cta:hover { opacity: 0.85; }
-
-    /* ── HERO ── */
-    #hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 9rem 3rem 5rem;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-
-    .hero-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: var(--muted);
-      margin-bottom: 2rem;
-    }
-
-    .hero-eyebrow::before {
-      content: '';
-      display: inline-block;
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: var(--green);
-    }
-
-    .hero-name {
-      font-family: var(--serif);
-      font-size: clamp(3rem, 8vw, 6.5rem);
-      font-weight: 700;
-      line-height: 1.05;
-      letter-spacing: -0.02em;
-      color: var(--text);
-      margin-bottom: 1.75rem;
-    }
-
-    .hero-name em {
-      font-style: italic;
-      color: var(--accent);
-    }
-
-    .hero-desc {
-      font-size: 1.1rem;
-      color: var(--soft);
-      max-width: 560px;
-      line-height: 1.8;
-      font-weight: 400;
-      margin-bottom: 2.5rem;
-    }
-
-    .hero-cta {
-      display: flex;
-      gap: 0.85rem;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 0.7rem 1.5rem;
-      font-size: 0.82rem;
-      font-weight: 600;
-      text-decoration: none;
-      border-radius: 8px;
-      transition: all 0.15s;
-      cursor: pointer;
-      font-family: var(--sans);
-    }
-
-    .btn-primary {
-      background: var(--text);
-      color: var(--bg);
-    }
-
-    .btn-primary:hover {
-      opacity: 0.85;
-      transform: translateY(-1px);
-    }
-
-    .btn-ghost {
-      background: transparent;
-      border: 1px solid var(--border2);
-      color: var(--soft);
-    }
-
-    .btn-ghost:hover {
-      border-color: var(--text);
-      color: var(--text);
-    }
-
-    /* ── LAYOUT ── */
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 0 3rem;
-    }
-
-    .section {
-      padding: 5rem 0;
-      border-top: 1px solid var(--border);
-    }
-
-    .section-header {
-      display: flex;
-      align-items: baseline;
-      gap: 1rem;
-      margin-bottom: 3rem;
-    }
-
-    .section-num {
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: var(--muted);
-      letter-spacing: 0.1em;
-    }
-
-    .section-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: -0.02em;
-    }
-
-    /* ── ABOUT ── */
-    .about-layout {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 5rem;
-      align-items: start;
-    }
-
-    .about-text p {
-      color: var(--soft);
-      font-size: 0.95rem;
-      line-height: 1.85;
-      margin-bottom: 1rem;
-    }
-
-    .about-text strong { color: var(--text); font-weight: 600; }
-
-    .stats-list {
-      display: flex;
-      flex-direction: column;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      overflow: hidden;
-      background: var(--surface);
-    }
-
-    .stat-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.9rem 1.25rem;
-      transition: background 0.15s;
-    }
-
-    .stat-row:hover { background: var(--bg2); }
-    .stat-row + .stat-row { border-top: 1px solid var(--border); }
-
-    .stat-key {
-      font-size: 0.78rem;
-      color: var(--muted);
-      font-weight: 500;
-    }
-
-    .stat-val {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    /* ── STACK ── */
-    .stack-categories {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1rem;
-    }
-
-    .stack-cat {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 1.25rem;
-      transition: border-color 0.15s;
-    }
-
-    .stack-cat:hover { border-color: var(--border2); }
-
-    .stack-cat-title {
-      font-size: 0.68rem;
-      font-weight: 600;
-      color: var(--muted);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-bottom: 1rem;
-    }
-
-    .stack-items {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .stack-item {
-      font-size: 0.85rem;
-      color: var(--soft);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .stack-item::before {
-      content: '';
-      width: 3px; height: 3px;
-      border-radius: 50%;
-      background: var(--border2);
-      flex-shrink: 0;
-    }
-
-    /* ── PROJECTS ── */
-    .projects-list {
-      display: flex;
-      flex-direction: column;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      background: var(--surface);
-    }
-
-    .project-row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 2rem;
-      align-items: start;
-      padding: 1.75rem 2rem;
-      transition: background 0.15s;
-    }
-
-    .project-row:hover { background: var(--bg2); }
-    .project-row + .project-row { border-top: 1px solid var(--border); }
-
-    .project-row.featured-row {
-      background: #f0f4ff;
-    }
-
-    .project-row.featured-row:hover { background: #e8eeff; }
-
-    .proj-left { display: flex; flex-direction: column; gap: 0.5rem; }
-
-    .proj-header {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      flex-wrap: wrap;
-    }
-
-    .proj-name {
-      font-size: 0.97rem;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .proj-badge {
-      font-size: 0.63rem;
-      font-weight: 600;
-      padding: 0.18rem 0.55rem;
-      border-radius: 20px;
-      letter-spacing: 0.04em;
-    }
-
-    .badge-live {
-      background: #dcfce7;
-      color: var(--green);
-      border: 1px solid #bbf7d0;
-    }
-
-    .badge-building {
-      background: #dbeafe;
-      color: var(--accent);
-      border: 1px solid #bfdbfe;
-    }
-
-    .badge-client {
-      background: #ffedd5;
-      color: var(--orange);
-      border: 1px solid #fed7aa;
-    }
-
-    .proj-desc {
-      font-size: 0.85rem;
-      color: var(--muted);
-      line-height: 1.7;
-      max-width: 560px;
-    }
-
-    .proj-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.35rem;
-      margin-top: 0.25rem;
-    }
-
-    .proj-tag {
-      font-size: 0.68rem;
-      color: var(--muted);
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      padding: 0.18rem 0.55rem;
-      border-radius: 4px;
-    }
-
-    .proj-right {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 0.5rem;
-      padding-top: 0.15rem;
-    }
-
-    .proj-link {
-      font-size: 0.78rem;
-      color: var(--accent);
-      font-weight: 500;
-      white-space: nowrap;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-      transition: opacity 0.15s;
-    }
-
-    .proj-link:hover { opacity: 0.7; }
-
-    .proj-link svg {
-      width: 11px; height: 11px;
-      opacity: 0.7;
-    }
-
-    /* ── CONTACT ── */
-    .contact-layout {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5rem;
-    }
-
-    .contact-text p {
-      font-size: 0.95rem;
-      color: var(--soft);
-      line-height: 1.85;
-      margin-bottom: 1rem;
-    }
-
-    .contact-text strong { color: var(--text); }
-
-    .contact-items {
-      display: flex;
-      flex-direction: column;
-      gap: 0.65rem;
-    }
-
-    .contact-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.9rem 1.25rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      text-decoration: none;
-      transition: all 0.15s;
-    }
-
-    .contact-item:hover {
-      border-color: var(--border2);
-      background: var(--bg2);
-    }
-
-    .contact-label {
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .contact-val {
-      font-size: 0.85rem;
-      color: var(--text);
-      font-weight: 500;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 1.75rem 3rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--surface);
-    }
-
-    .footer-text {
-      font-size: 0.78rem;
-      color: var(--muted);
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      nav { padding: 1rem 1.5rem; }
-      .nav-links { display: none; }
-      #hero { padding: 7rem 1.5rem 4rem; }
-      .container { padding: 0 1.5rem; }
-      .about-layout,
-      .contact-layout { grid-template-columns: 1fr; gap: 2.5rem; }
-      .stack-categories { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
-      .project-row { grid-template-columns: 1fr; }
-      .proj-right { align-items: flex-start; }
-      footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OlawaleOS · Akomolafe Olawale, full-stack developer in Lagos</title>
+<meta name="description" content="Akomolafe Olawale builds websites, online stores and apps for businesses in Nigeria, the UK and beyond. Explore his work as a desktop.">
+<meta name="theme-color" content="#0f1529">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="desktop" id="desktop">
 
-  <!-- NAV -->
-  <nav>
-    <div class="nav-logo">Akomolafe Olawale</div>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#stack">Stack</a></li>
-      <li><a href="#work">Work</a></li>
-      <li><a href="#contact" class="nav-cta">Contact</a></li>
-    </ul>
-  </nav>
+  <header class="menubar" data-bp="menubar · sticky, blurred">
+    <button class="logo" type="button" data-open="about" aria-label="About Olawale">AO</button>
+    <div class="menu">
+      <button type="button" aria-haspopup="true" aria-expanded="false" data-i18n="file">File</button>
+      <div class="drop" role="menu">
+        <button type="button" role="menuitem" data-open="about"><span>me.txt</span></button>
+        <button type="button" role="menuitem" data-open="work"><span data-i18n="openWork">Open work folder</span></button>
+        <button type="button" role="menuitem" data-open="orders"><span>Orders.app</span></button>
+        <button type="button" role="menuitem" data-open="contact"><span>contact.txt</span></button>
+        <hr>
+        <a role="menuitem" href="https://wa.me/2348109549274" target="_blank" rel="noopener"><span data-i18n="wa">Message me on WhatsApp</span></a>
+        <a role="menuitem" href="mailto:akomssammy@gmail.com"><span data-i18n="email">Email me</span></a>
+      </div>
+    </div>
+    <div class="menu">
+      <button type="button" aria-haspopup="true" aria-expanded="false" data-i18n="view">View</button>
+      <div class="drop" role="menu">
+        <button type="button" role="menuitem" data-cmd="arrange"><span data-i18n="arrange">Arrange windows</span></button>
+        <button type="button" role="menuitem" data-cmd="closeall"><span data-i18n="closeall">Close all windows</span><kbd>Esc</kbd></button>
+        <button type="button" role="menuitem" data-cmd="restore"><span data-i18n="restore">Restore windows</span></button>
+        <hr>
+        <button type="button" role="menuitemcheckbox" aria-checked="false" data-cmd="blueprint"><span data-i18n="blueprint">Blueprint mode</span><kbd>B</kbd></button>
+        <button type="button" role="menuitem" data-cmd="reboot"><span data-i18n="reboot">Restart OlawaleOS</span></button>
+      </div>
+    </div>
+    <div class="menu">
+      <button type="button" aria-haspopup="true" aria-expanded="false" data-i18n="lang">Language</button>
+      <div class="drop" role="menu">
+        <button type="button" role="menuitemradio" aria-checked="false" data-lang="yo"><span>Yorùbá</span></button>
+        <button type="button" role="menuitemradio" aria-checked="true" data-lang="en"><span>English</span></button>
+        <button type="button" role="menuitemradio" aria-checked="false" data-lang="zh"><span>中文</span></button>
+      </div>
+    </div>
+    <div class="right">
+      <span class="sky" id="sky-label" title="The desktop follows the sky in Lagos"></span>
+      <span class="city here">LAG <b id="c-lag">--:--</b></span>
+      <span class="city">LDN <b id="c-ldn">--:--</b></span>
+      <span class="city">NYC <b id="c-nyc">--:--</b></span>
+      <span class="dot" id="avail-dot" title=""></span>
+    </div>
+  </header>
 
-  <!-- HERO -->
-  <div id="hero">
-    <div class="hero-eyebrow">Available for new projects · Lagos, Nigeria</div>
-    <h1 class="hero-name">I build things<br />people <em>actually</em> use.</h1>
-    <p class="hero-desc">
-      Full-stack developer and founder based in Lagos. I design, build, and ship — from mobile apps and e-commerce platforms to brand infrastructure and everything between.
-    </p>
-    <div class="hero-cta">
-      <a href="#work" class="btn btn-primary">See My Work</a>
-      <a href="#contact" class="btn btn-ghost">Get In Touch</a>
+  <div class="wall" data-bp="wallpaper · canvas monogram">
+    <canvas id="mono" aria-hidden="true"></canvas>
+    <p class="wall-caption"><b>Akomolafe Olawale</b> · <span data-i18n="caption">full-stack developer, Lagos</span> · <span data-i18n="hint">double-click an icon to open it</span></p>
+
+    <nav class="icons left" id="icons-left" aria-label="System"></nav>
+    <nav class="icons right" id="icons-right" aria-label="Projects"></nav>
+
+    <div class="home" id="home">
+      <div class="home-hello"><p class="g" id="home-greet">Ẹ n lẹ.</p><p data-i18n="homeSub">Akomolafe Olawale · full-stack developer, Lagos</p></div>
+      <div class="home-grid" id="home-grid"></div>
     </div>
   </div>
 
-  <div class="container">
-
-    <!-- ABOUT -->
-    <div class="section" id="about">
-      <div class="section-header">
-        <span class="section-num">01</span>
-        <h2 class="section-title">About</h2>
+  <!-- ===== windows ===== -->
+  <section class="win" data-id="about" data-w="470" data-bp="me.txt · window" role="dialog" aria-labelledby="t-about">
+    <div class="titlebar"><button class="close" type="button" aria-label="Close" data-label="Done"></button><span class="title" id="t-about">me.txt</span></div>
+    <div class="body">
+      <p class="greet"><span id="greet">Ẹ n lẹ.</span></p>
+      <p class="muted" data-i18n="langs">I speak Yoruba, English and Mandarin, and I build in all three.</p>
+      <h1 class="intro" id="intro">I'm Olawale, a full-stack developer in Lagos. I build <span class="rot" id="rot">online stores</span> that businesses actually use.</h1>
+      <p class="lede" data-i18n="lede">Online stores, booking and ordering systems, mobile apps and startup MVPs, with payments set up and an admin panel you can run yourself. For businesses in Nigeria, the UK and anywhere else.</p>
+      <div class="row">
+        <a class="btn primary" href="https://wa.me/2348109549274" target="_blank" rel="noopener" data-i18n="wa">Message me on WhatsApp</a>
+        <button class="btn" type="button" data-open="work" data-i18n="seeWork">See my work</button>
+        <button class="btn dark" type="button" data-open="ask">&gt;_ <span data-i18n="askBtn">Ask OlawaleOS</span></button>
       </div>
-      <div class="about-layout">
-        <div class="about-text">
-          <p>I'm a Lagos-based full-stack developer with a bias for execution. I've shipped production-grade platforms, e-commerce systems, and mobile apps — and handled everything from database architecture to brand identity, sometimes on the same project.</p>
-          <p>Before Lagos, I was based in China — retained developer for <strong>Oriflame Trading Company</strong> and <strong>Eternal Energy Trading Company</strong>, and a student at Sanming University and Nanjing University of Technology.</p>
-          <p>Most of my work sits at the intersection of product and design. I care about how things look just as much as how they work.</p>
+      <p class="avail"><span class="dot" id="avail-dot2"></span><span id="avail-text">Checking Lagos time</span></p>
+    </div>
+  </section>
+
+  <section class="win" data-id="work" data-w="600" data-bp="work/ · filterable grid" role="dialog" aria-labelledby="t-work">
+    <div class="titlebar"><button class="close" type="button" aria-label="Close" data-label="Done"></button><span class="title" id="t-work">work/</span></div>
+    <div class="body">
+      <h2 data-i18n="workTitle">Things I've built</h2>
+      <div class="filters" role="group" aria-label="Filter projects">
+        <button type="button" data-filter="all" aria-pressed="true" data-i18n="fAll">All</button>
+        <button type="button" data-filter="store" aria-pressed="false" data-i18n="fStore">Online stores</button>
+        <button type="button" data-filter="app" aria-pressed="false" data-i18n="fApp">Apps and platforms</button>
+        <button type="button" data-filter="site" aria-pressed="false" data-i18n="fSite">Business websites</button>
+        <button type="button" data-filter="progress" aria-pressed="false" data-i18n="fProgress">In progress</button>
+      </div>
+      <div class="grid-icons" id="work-grid"></div>
+    </div>
+  </section>
+
+  <section class="win" data-id="lab" data-w="520" data-bp="lab/ · ideas" role="dialog" aria-labelledby="t-lab">
+    <div class="titlebar"><button class="close" type="button" aria-label="Close" data-label="Done"></button><span class="title" id="t-lab">lab/</span></div>
+    <div class="body">
+      <h2 data-i18n="labTitle">In the lab</h2>
+      <p class="muted" style="margin-bottom:1rem" data-i18n="labSub">Ideas I'm exploring next. Not built yet, but open to the right partner.</p>
+      <div class="grid-icons" id="lab-grid"></div>
+    </div>
+  </section>
+
+  <section class="win" data-id="services" data-w="720" data-bp="services.txt · 3-col grid" role="dialog" aria-labelledby="t-services">
+    <div class="titlebar"><button class="close" type="button" aria-label="Close" data-label="Done"></button><span class="title" id="t-services">services.txt</span></div>
+    <div class="body">
+      <h2>How I can help</h2>
+      <p class="muted" style="margin-bottom:1rem">Whether you run a shop in Lekki, a restaurant in London or a startup anywhere, the work starts with what your customers need to do.</p>
+      <div class="cols">
+        <div><p class="who">For businesses</p><h3>A website that brings you customers</h3><ul><li>Online stores and catalogues</li><li>Booking, ordering and reservations</li><li>Payments with Paystack or Stripe</li><li>New orders sent to WhatsApp</li><li>An admin panel you update yourself</li></ul></div>
+        <div><p class="who">For founders and startups</p><h3>Your product, from idea to launch</h3><ul><li>MVPs for investors and users</li><li>Android and iOS apps</li><li>Vendor and admin dashboards</li><li>AI features on modern models</li><li>Subscriptions and split payments</li></ul></div>
+        <div><p class="who">After launch</p><h3>A developer you can call on</h3><ul><li>Ongoing fixes and features</li><li>Retained work for teams abroad</li><li>Speed and mobile improvements</li><li>Hosting and domain handled</li><li>Taking over an existing site</li></ul></div>
+      </div>
+      <ol class="steps">
+        <li><b>We talk</b>A quick WhatsApp chat or call about your business and customers.</li>
+        <li><b>You see a preview</b>A working preview early, so you react to something real.</li>
+        <li><b>I build it out</b>Payments, admin, content and mobile, with regular check-ins.</li>
+        <li><b>You go live</b>I launch it, show you how to run it, and stay around.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="win" data-id="story" data-w="520" data-bp="story.md · timeline" role="dialog" aria-labelledby="t-story">
+    <div class="titlebar"><button class="close" type="button" aria-label="Close" data-label="Done"></button><span class="title" id="t-story">story.md</span></div>
+    <div class="body">
+      <h2>About me</h2>
+      <p>Before Lagos, I was based in China, studying and working as a retained developer. Living there, I got used to apps that made everyday life feel effortless: ordering, booking and paying without a second thought. That's the standard I build to.</p>
+      <p>Back in Lagos, I design and build products end to end, and I run my own ventures, so I know what it takes to get people to use something, not just to ship it.</p>
+      <ul class="timeline">
+        <li><small>China</small>Sanming University and Nanjing University of Technology</li>
+        <li><small>China</small>Retained developer for Oriflame Trading Company and Eternal Energy Trading Company</li>
+        <li><small>Lagos</small>Founder, DCR Agency, building for clients in Nigeria, the UK and the US</li>
+        <li><small>Lagos</small>Building CityPulse NG, FitCheck and Nostalgic Ambition Studio</li>
+        <li><small>Author</small><i>Why Would You Respect Me?</i> and <i>Who's Really In Charge</i></li>
+      </ul>
+      <ul class="kv">
+        <li><span>Languages</span><b>English, Yoruba, Mandarin</b></li>
+        <li><span>Builds with</span><b>React, React Native, Expo, Node.js, PostgreSQL, Supabase, Firebase</b></li>
+        <li><span>Ships on</span><b>Railway, Netlify, Cloudinary</b></li>
+        <li><span>Integrations</span><b>Paystack, Stripe, Resend, push, WhatsApp</b></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="win" data-id="orders" data-w="660" data-bp="Orders.app · live state, no backend" role="dialog" aria-labelledby="t-orders">
+    <div class="titlebar"><button class="close" type="button" aria-label="Close" data-label="Done"></button><span class="title" id="t-orders">Orders.app</span></div>
+    <div class="body">
+      <p class="muted" style="margin-bottom:1rem" data-i18n="ordersHint">Tap pay on the customer's phone and watch the order land on the owner's WhatsApp. This is how the ordering sites I build work.</p>
+      <div class="orders">
+        <div class="phone"><div class="screen shop">
+          <div class="shop-top"><strong>Mama Tee's Kitchen</strong><span id="shop-loc">Lekki, Lagos</span></div>
+          <div class="dish"><div class="plate" aria-hidden="true"></div><h4 id="dish-name">Party Jollof with Chicken</h4><p id="dish-desc">Smoky jollof, grilled chicken, fried plantain</p>
+            <div class="qty"><span id="unit-price">₦4,500</span><div><button type="button" id="minus" aria-label="Remove one">−</button><b id="qty" aria-live="polite">1</b><button type="button" id="plus" aria-label="Add one">+</button></div></div></div>
+          <button type="button" class="pay" id="pay">Pay <span id="pay-total">₦4,500</span><small id="pay-via">with Paystack</small></button>
+        </div></div>
+        <div class="flow">
+          <div class="market" role="group" aria-label="Switch market"><button type="button" data-m="ng" aria-pressed="true">Lagos</button><button type="button" data-m="uk" aria-pressed="false">London</button></div>
+          <div class="wire" id="wire" aria-hidden="true"><i></i></div>
+          <div class="counters"><div><strong id="c-orders">0</strong><span>Orders today</span></div><div><strong id="c-paid">₦0</strong><span>Paid today</span></div></div>
+          <p class="note" id="flow-note">Paystack confirms the payment, then the order goes straight to WhatsApp.</p>
         </div>
-        <div class="stats-list">
-          <div class="stat-row">
-            <span class="stat-key">Based in</span>
-            <span class="stat-val">Lagos, Nigeria</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-key">Focus</span>
-            <span class="stat-val">Full-Stack · Mobile · UI</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-key">Deployments</span>
-            <span class="stat-val">5+ Production</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-key">Ventures</span>
-            <span class="stat-val">3 Active</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-key">Market</span>
-            <span class="stat-val">Nigeria & Diaspora</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-key">Author</span>
-            <span class="stat-val">Published on Amazon</span>
-          </div>
-        </div>
+        <div class="phone" id="phone-owner"><div class="screen wa">
+          <div class="wa-top"><div class="av">MT</div><div><strong>Orders bot</strong><span>online</span></div></div>
+          <div class="wa-body" id="wa-body" aria-live="polite"><div class="bubble">Orders from your website will appear here.<span class="t">09:00</span></div></div>
+        </div></div>
       </div>
     </div>
+  </section>
 
-    <!-- STACK -->
-    <div class="section" id="stack">
-      <div class="section-header">
-        <span class="section-num">02</span>
-        <h2 class="section-title">Stack</h2>
+  <section class="win" data-id="phone" data-w="380" data-bp="Phone.3d · WebGL" role="dialog" aria-labelledby="t-phone">
+    <div class="titlebar"><button class="close" type="button" aria-label="Close" data-label="Done"></button><span class="title" id="t-phone">Phone.3d</span></div>
+    <div class="body">
+      <div class="stage" id="stage" role="img" aria-label="A 3D phone showing live projects. Drag to spin, tap to switch.">
+        <div class="fb"><img id="fb-img" src="shots/mayree.jpg" alt=""></div>
       </div>
-      <div class="stack-categories">
-        <div class="stack-cat">
-          <div class="stack-cat-title">Frontend & Mobile</div>
-          <div class="stack-items">
-            <div class="stack-item">React Native</div>
-            <div class="stack-item">Expo</div>
-            <div class="stack-item">HTML / CSS</div>
-            <div class="stack-item">JavaScript</div>
-          </div>
-        </div>
-        <div class="stack-cat">
-          <div class="stack-cat-title">Backend & Data</div>
-          <div class="stack-items">
-            <div class="stack-item">Node.js / Express</div>
-            <div class="stack-item">PostgreSQL</div>
-            <div class="stack-item">Supabase</div>
-            <div class="stack-item">Firebase</div>
-          </div>
-        </div>
-        <div class="stack-cat">
-          <div class="stack-cat-title">Infrastructure</div>
-          <div class="stack-items">
-            <div class="stack-item">Railway</div>
-            <div class="stack-item">Netlify</div>
-            <div class="stack-item">Cloudinary</div>
-            <div class="stack-item">Git / GitHub</div>
-          </div>
-        </div>
-        <div class="stack-cat">
-          <div class="stack-cat-title">Integrations</div>
-          <div class="stack-items">
-            <div class="stack-item">Paystack</div>
-            <div class="stack-item">Resend</div>
-            <div class="stack-item">FCM Push</div>
-            <div class="stack-item">WhatsApp API</div>
-          </div>
-        </div>
+      <div class="show">
+        <div class="now"><strong id="show-name">Mayree</strong><span class="badge live" id="show-status">Live</span><a id="show-link" href="https://mayree.co" target="_blank" rel="noopener">Visit site</a></div>
+        <div class="dots" id="dots" role="group" aria-label="Choose project"></div>
+        <p class="hint" data-i18n="spin">Drag to spin. Tap the phone to switch project.</p>
       </div>
     </div>
+  </section>
 
-    <!-- WORK -->
-    <div class="section" id="work">
-      <div class="section-header">
-        <span class="section-num">03</span>
-        <h2 class="section-title">Work</h2>
-      </div>
-      <div class="projects-list">
-
-        <div class="project-row featured-row">
-          <div class="proj-left">
-            <div class="proj-header">
-              <span class="proj-name">CityPulse NG</span>
-              <span class="proj-badge badge-live">Live</span>
-              <span class="proj-badge badge-building">Building</span>
-            </div>
-            <p class="proj-desc">Full-stack urban discovery platform for Lagos. Restaurants, events, hotels, nightlife — built for Nigerian Gen Z and the diaspora. React Native mobile app, Node/PostgreSQL backend, real-time chat, push notifications, vendor dashboard, and wallet system.</p>
-            <div class="proj-tags">
-              <span class="proj-tag">React Native</span>
-              <span class="proj-tag">Expo</span>
-              <span class="proj-tag">Node.js</span>
-              <span class="proj-tag">PostgreSQL</span>
-              <span class="proj-tag">Firebase</span>
-              <span class="proj-tag">Railway</span>
-              <span class="proj-tag">Cloudinary</span>
-            </div>
-          </div>
-          <div class="proj-right">
-            <a href="https://city-pulse.live" target="_blank" class="proj-link">
-              city-pulse.live
-              <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 10L10 2M10 2H4M10 2V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
-          </div>
-        </div>
-
-        <div class="project-row">
-          <div class="proj-left">
-            <div class="proj-header">
-              <span class="proj-name">Nostalgic Ambition</span>
-              <span class="proj-badge badge-live">Live</span>
-            </div>
-            <p class="proj-desc">Drop-model e-commerce for a Lagos streetwear brand. Password-gated drops, countdown releases, polaroid product grid, Paystack checkout, order tracking, and admin panel.</p>
-            <div class="proj-tags">
-              <span class="proj-tag">Netlify</span>
-              <span class="proj-tag">Supabase</span>
-              <span class="proj-tag">Paystack</span>
-              <span class="proj-tag">Resend</span>
-              <span class="proj-tag">Cloudinary</span>
-            </div>
-          </div>
-          <div class="proj-right">
-            <a href="https://nostalgicambition.com" target="_blank" class="proj-link">
-              nostalgicambition.com
-              <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 10L10 2M10 2H4M10 2V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
-          </div>
-        </div>
-
-        <div class="project-row">
-          <div class="proj-left">
-            <div class="proj-header">
-              <span class="proj-name">Mayree</span>
-              <span class="proj-badge badge-live">Live</span>
-            </div>
-            <p class="proj-desc">Luxury handbag brand and e-commerce platform. Supabase backend, Paystack checkout, admin panel with content editor, and two product streams — The Edit and By Request.</p>
-            <div class="proj-tags">
-              <span class="proj-tag">HTML/CSS</span>
-              <span class="proj-tag">Supabase</span>
-              <span class="proj-tag">Paystack</span>
-              <span class="proj-tag">Netlify</span>
-            </div>
-          </div>
-          <div class="proj-right">
-            <a href="https://mayree.co" target="_blank" class="proj-link">
-              mayree.co
-              <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 10L10 2M10 2H4M10 2V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
-          </div>
-        </div>
-
-        <div class="project-row">
-          <div class="proj-left">
-            <div class="proj-header">
-              <span class="proj-name">Afro Steeze</span>
-              <span class="proj-badge badge-client">Client</span>
-            </div>
-            <p class="proj-desc">Custom e-commerce site for a Nigerian fashion brand. Handled URL stability and the async Paystack callback edge case that breaks most Nigerian payment integrations.</p>
-            <div class="proj-tags">
-              <span class="proj-tag">Netlify</span>
-              <span class="proj-tag">JSONBin</span>
-              <span class="proj-tag">Cloudinary</span>
-              <span class="proj-tag">Paystack</span>
-            </div>
-          </div>
-          <div class="proj-right">
-            <a href="https://afrosteeeze.com" target="_blank" class="proj-link">
-              afrosteeeze.com
-              <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 10L10 2M10 2H4M10 2V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
-          </div>
-        </div>
-
-        <div class="project-row">
-          <div class="proj-left">
-            <div class="proj-header">
-              <span class="proj-name">Sadora Beauty Hub</span>
-              <span class="proj-badge badge-client">Client</span>
-            </div>
-            <p class="proj-desc">Luxury landing page for a women-only beauty studio in Ajah, Lagos. Service packages, WhatsApp booking integration, mobile-first responsive design.</p>
-            <div class="proj-tags">
-              <span class="proj-tag">HTML/CSS</span>
-              <span class="proj-tag">JavaScript</span>
-              <span class="proj-tag">Netlify</span>
-            </div>
-          </div>
-          <div class="proj-right"></div>
-        </div>
-
-      </div>
+  <section class="win" data-id="contact" data-w="430" data-bp="contact.txt" role="dialog" aria-labelledby="t-contact">
+    <div class="titlebar"><button class="close" type="button" aria-label="Close" data-label="Done"></button><span class="title" id="t-contact">contact.txt</span></div>
+    <div class="body">
+      <p class="contact-big" data-i18n="contactBig">Tell me what you're building.</p>
+      <p class="muted" style="margin-top:.6rem" data-i18n="contactSub">Send a message with what your business does and what you need. I usually reply the same day, Lagos time.</p>
+      <ul class="links">
+        <li><a href="https://wa.me/2348109549274" target="_blank" rel="noopener"><b>WhatsApp</b><span>+234 810 954 9274</span></a></li>
+        <li><a href="mailto:akomssammy@gmail.com"><b>Email</b><span>akomssammy@gmail.com</span></a></li>
+        <li><a href="https://instagram.com/olawale_212" target="_blank" rel="noopener"><b>Instagram</b><span>@olawale_212</span></a></li>
+        <li><a href="https://instagram.com/dcragency1" target="_blank" rel="noopener"><b>DCR Agency</b><span>@dcragency1</span></a></li>
+        <li><a href="https://github.com/dcrsammy" target="_blank" rel="noopener"><b>GitHub</b><span>dcrsammy</span></a></li>
+      </ul>
     </div>
+  </section>
 
-    <!-- CONTACT -->
-    <div class="section" id="contact">
-      <div class="section-header">
-        <span class="section-num">04</span>
-        <h2 class="section-title">Contact</h2>
-      </div>
-      <div class="contact-layout">
-        <div class="contact-text">
-          <p>I'm open to <strong>freelance projects</strong>, <strong>retained development roles</strong>, and conversations about what's being built in the Nigerian tech space.</p>
-          <p>If you have a product that needs to be built right — not outsourced and forgotten — reach out.</p>
-        </div>
-        <div class="contact-items">
-          <a href="mailto:akomssammy@gmail.com" class="contact-item">
-            <span class="contact-label">Email</span>
-            <span class="contact-val">akomssammy@gmail.com</span>
-          </a>
-          <a href="https://wa.me/2348109549274" target="_blank" rel="noopener" class="contact-item">
-            <span class="contact-label">WhatsApp</span>
-            <span class="contact-val">+234 810 954 9274</span>
-          </a>
-          <a href="https://github.com/dcrsammy" target="_blank" class="contact-item">
-            <span class="contact-label">GitHub</span>
-            <span class="contact-val">github.com/dcrsammy</span>
-          </a>
-          <a href="https://instagram.com/olawale_212" target="_blank" class="contact-item">
-            <span class="contact-label">Instagram</span>
-            <span class="contact-val">@olawale_212</span>
-          </a>
-          <a href="https://instagram.com/dcragency1" target="_blank" rel="noopener" class="contact-item">
-            <span class="contact-label">DCR Agency</span>
-            <span class="contact-val">@dcragency1</span>
-          </a>
-        </div>
-      </div>
+  <section class="win term" data-id="ask" data-w="520" data-bp="ask.sh · AI terminal (Claude)" role="dialog" aria-labelledby="t-ask">
+    <div class="titlebar"><button class="close" type="button" aria-label="Close" data-label="Done"></button><span class="title" id="t-ask">ask.sh</span></div>
+    <div class="body">
+      <div class="term-out" id="term-out" aria-live="polite"></div>
+      <div class="chips" id="term-chips"></div>
+      <form class="term-in" id="term-form" autocomplete="off">
+        <label for="term-input" class="prompt">visitor@olawaleos ~ %</label>
+        <input id="term-input" type="text" maxlength="600" spellcheck="false" placeholder="ask anything, or type help">
+      </form>
     </div>
+  </section>
 
-  </div>
+  <div id="project-wins"></div>
 
-  <footer>
-    <div class="footer-text">© 2026 Akomolafe Olawale · Lagos, Nigeria</div>
-    <div class="footer-text">Built with intent.</div>
+  <footer class="taskbar" data-bp="taskbar">
+    <button class="startbtn" type="button" id="startbtn" aria-expanded="false" aria-controls="startmenu">✦ <span data-i18n="start">start</span></button>
+    <div class="tabs" id="tabs" aria-label="Open windows"></div>
+    <span class="sig">© <span id="year">2026</span> Akomolafe Olawale · <span data-i18n="madeIn">hand-built in Lagos</span></span>
+    <nav class="dock" id="dock" aria-label="Dock"></nav>
   </footer>
 
+  <div class="startmenu" id="startmenu" role="menu">
+    <div class="who"><div class="av">AO</div><div><b>Akomolafe Olawale</b><small data-i18n="caption">full-stack developer, Lagos</small></div></div>
+    <button type="button" data-open="about">me.txt</button>
+    <button type="button" data-open="ask">ask.sh</button>
+    <button type="button" data-open="work" data-i18n="openWork">Open work folder</button>
+    <button type="button" data-open="lab">lab/</button>
+    <button type="button" data-open="services">services.txt</button>
+    <button type="button" data-open="story">story.md</button>
+    <button type="button" data-open="orders">Orders.app</button>
+    <button type="button" data-open="phone">Phone.3d</button>
+    <a href="https://wa.me/2348109549274" target="_blank" rel="noopener" data-i18n="wa">Message me on WhatsApp</a>
+    <a href="mailto:akomssammy@gmail.com" data-i18n="email">Email me</a>
+  </div>
+</div>
+
+<noscript><div style="position:fixed;inset:0;background:#17203a;color:#eef0f6;padding:2rem;font-family:sans-serif;z-index:9999">
+  <h1>Akomolafe Olawale</h1><p>Full-stack developer in Lagos. WhatsApp +234 810 954 9274 · akomssammy@gmail.com</p></div></noscript>
+
+<script src="os.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
 </body>
 </html>
