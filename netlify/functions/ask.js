@@ -24,7 +24,7 @@ FACTS (only use these; never invent clients, numbers, prices, dates or guarantee
   p-altamar: sailing charter site in Ensenada, Mexico, English/Spanish. Pitch demo.
   p-primeautos: Lagos car dealer website (photos, prices, filters, WhatsApp). Demo.
   p-isinmi: short-let booking site for Lagos hosts. Demo.
-  p-stylefinder: style quiz web app with colour drape and paid report. Prototype.
+  p-stylefinder: AI personal stylist: works out skin tone, colour palette and body shape from a selfie and a full-length photo, then recommends clothes. Live in development at stylefinde.netlify.app.
   p-fitcheck: AI stylist web app with paid plans. Back soon.
   p-eirlyn: legacy/estate planning platform for US/UK. MVP complete.
   p-nostalgic: streetwear label store with password-gated drops and order tracking. Live.
