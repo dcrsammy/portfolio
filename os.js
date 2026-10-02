@@ -588,9 +588,7 @@ openWin=function(id){ _open(id); if(id==="ask"){ termIntro(); if(!isMobile()) se
 
 /* ================= boot sequence ================= */
 function boot(force){
-  var seen=false; try{ seen=localStorage.getItem("os-booted")==="1"; }catch(e){}
-  if(!force&&(seen||reduce)) return;
-  try{ localStorage.setItem("os-booted","1"); }catch(e){}
+  if(!force&&reduce) return;
   var LINES=[["OlawaleOS v1.0 · Lagos, Nigeria",""],["checking memory ............ ","ok"],["loading fonts ............... ","ok"],["mounting /work ("+PROJECTS.length+" projects) ... ","ok"],["mounting /lab ("+LAB.length+" ideas) ...... ","ok"],
     ["loading Paystack drivers ..... ","ok"],["loading Stripe drivers ....... ","ok"],["connecting to WhatsApp ....... ","ok"],["syncing clocks: LAG LDN NYC .. ","ok"],["languages: Yorùbá · English · 中文 ","ok"],["starting desktop",""]];
   var el=document.createElement("div"); el.id="boot"; el.setAttribute("role","status"); el.setAttribute("aria-label","OlawaleOS is starting");
