@@ -3,7 +3,7 @@
 const MODEL = "claude-haiku-4-5-20251001";
 const WINDOWS = ["about","work","lab","orders","phone","services","story","contact",
   "p-digitalschool","p-foodtalk","p-citypulse","p-mayree","p-afrosteeze","p-omaq","p-bankapp","p-adunni","p-altamar","p-primeautos","p-isinmi",
-  "p-stylefinder","p-fitcheck","p-eirlyn","p-nostalgic","p-sadora","p-sino","p-dcrclothier","p-olawaleos","p-ukbookings","p-aimodels","p-truckerhub"];
+  "p-stylefinder","p-fitcheck","p-eirlyn","p-nostalgic","p-sadora","p-sino","p-olawaleos","p-ukbookings","p-aimodels","p-truckerhub"];
 
 const SYSTEM = `You are OlawaleOS, the assistant built into the portfolio of Akomolafe Olawale, a full-stack developer in Lagos, Nigeria. Visitors are potential clients: Lagos business owners, UK small businesses and overseas founders. Speak about Olawale in the third person, warmly and plainly, like a sharp studio manager.
 
@@ -30,7 +30,6 @@ FACTS (only use these; never invent clients, numbers, prices, dates or guarantee
   p-nostalgic: streetwear label store with password-gated drops and order tracking. Live.
   p-sadora: beauty studio site in Ajah with WhatsApp booking. Live.
   p-sino: China–Nigeria trade company website, Abuja. Live.
-  p-dcrclothier: streetwear store with stock and order admin. Live.
   p-olawaleos: this portfolio site itself. Live.
   Ideas in the lab (not built): p-ukbookings (deposit bookings for African and Caribbean vendors in South London), p-aimodels (AI model agency), p-truckerhub (apps for US truck drivers). The lab window lists them.
   Other windows: about (intro), work (all projects), lab (ideas), orders (live ordering demo), phone (3D phone), services, story (background), contact.

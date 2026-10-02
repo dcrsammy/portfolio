@@ -53,11 +53,12 @@ var PROJECTS=[
    desc:"A luxury landing page for a women-only beauty studio, with service packages and booking straight through WhatsApp. Built mobile-first, because that's where her clients find her.",stack:"HTML, CSS, JavaScript, Netlify"},
   {id:"sino",name:"Sino Africa Trading",kind:"site",sub:"Client, trade company in Abuja",status:"Live",url:"https://sinoafrica.netlify.app",host:"sinoafrica.netlify.app",shot:"shots/sino.jpg",
    desc:"A five-page website for a China–Nigeria trade and logistics company, explaining its services and how importing with them works.",stack:"HTML, CSS, JavaScript, Netlify"},
-  {id:"dcrclothier",name:"DCR Clothier",kind:"store",sub:"Online store",status:"Live",url:"https://dcrclothier.netlify.app",host:"dcrclothier.netlify.app",shot:"shots/dcrclothier.jpg",
+  {id:"dcrclothier",hidden:true,name:"DCR Clothier",kind:"store",sub:"Online store",status:"Live",url:"https://dcrclothier.netlify.app",host:"dcrclothier.netlify.app",shot:"shots/dcrclothier.jpg",
    desc:"A streetwear store with product management and an admin panel for stock and orders.",stack:"Supabase, JavaScript"},
   {id:"olawaleos",name:"OlawaleOS",kind:"site",sub:"This portfolio",status:"Live",url:"https://olawale.nostalgicambition.com",host:"olawale.nostalgicambition.com",color:["#2b385f","#0f1529"],mark:"AO",
    desc:"The site you're using: a desktop in the browser with draggable windows, a WebGL phone, a character-art wallpaper that follows the Lagos sky, three languages and an AI terminal. Hand-written, no framework.",stack:"HTML, CSS, JavaScript, three.js, Claude API, Netlify Functions"}
 ];
+PROJECTS=PROJECTS.filter(function(p){ return !p.hidden; });
 var LAB=[
   {id:"ukbookings",name:"UK vendor bookings",kind:"lab",sub:"Deposit booking platform, South London",status:"Idea",color:["#3d5afe","#1a237e"],mark:"UK",
    desc:"Bookings with deposits for African and Caribbean restaurants and hair and beauty vendors in South London, built on the CityPulse engine. Each vendor sets their own deposit and cancellation rules.",stack:"Expo (web now, iOS and Android later)"},
