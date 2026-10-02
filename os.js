@@ -537,6 +537,7 @@ function openFromAnswer(ids){
 function cta(){ linkLine('→ <a href="https://wa.me/2348109549274" target="_blank" rel="noopener">Message Olawale on WhatsApp</a> · <a href="mailto:akomssammy@gmail.com">akomssammy@gmail.com</a>'); }
 function localCommand(q){
   var c=q.trim().toLowerCase(), parts=c.split(/\s+/);
+  if(c==="tracker"){ openWin("tracker"); line("→ opened tracker.app","opened"); return true; }
   if(c==="help"){ line("commands: ls · open <project> · whoami · contact · clear · lang yo|en|zh · or just ask a question","sys"); return true; }
   if(c==="clear"){ out.innerHTML=""; return true; }
   if(c==="ls"||c==="ls work"){ line(PROJECTS.map(function(p){ return p.id; }).join("   "),"a"); return true; }
@@ -589,6 +590,125 @@ function submit(q){
 form.addEventListener("submit",function(e){ e.preventDefault(); submit(input.value); });
 var _open=openWin;
 openWin=function(id){ _open(id); if(id==="ask"){ termIntro(); if(!isMobile()) setTimeout(function(){ input.focus(); },60); } };
+
+
+/* ================= private project tracker ================= */
+var TRK_KEY="os-trk", trkTok=null, trkProjects=[], trkPrev={}, trkOpen={}, trkFilter="all", trkTimer=null, trkMsg="";
+try{ trkTok=localStorage.getItem(TRK_KEY); }catch(e){}
+function trkSave(t){ trkTok=t; try{ t?localStorage.setItem(TRK_KEY,t):localStorage.removeItem(TRK_KEY); }catch(e){} trkIcons(); }
+function trkIcons(){
+  $$(".trk-icon").forEach(function(e){ e.remove(); });
+  if(!trkTok) return;
+  var mk=function(){ var b=document.createElement("button"); b.type="button"; b.className="icon trk-icon"; b.setAttribute("data-open","tracker"); b.innerHTML='<span class="glyph trk">▮▮▯</span><span class="label">tracker.app</span>'; return b; };
+  $("#icons-left").insertBefore(mk(),$("#icons-left").firstChild);
+  $("#home-grid").insertBefore(mk(),$("#home-grid").firstChild);
+  var sb=document.createElement("button"); sb.type="button"; sb.className="trk-icon"; sb.setAttribute("data-open","tracker"); sb.textContent="tracker.app (private)"; $("#startmenu").insertBefore(sb,$("#startmenu .who").nextSibling);
+}
+function trkApi(body){
+  body.token=trkTok;
+  return fetch("/.netlify/functions/tracker",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)})
+    .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(d){ d._status=r.status; return d; }); })
+    .catch(function(){ return {_status:0,error:"You're offline. Try again."}; });
+}
+function trkPct(p){ var m=p.milestones||[]; return m.length?Math.round(m.filter(function(x){return x.done}).length/m.length*100):0; }
+function trkBucket(p){ return /^idea/i.test(p.status||"")||p.kind==="idea"?"idea":/^live/i.test(p.status||"")?"live":"build"; }
+function trkAgo(iso){ if(!iso) return "never"; var s=(Date.now()-new Date(iso))/1000; if(s<60) return "just now"; if(s<3600) return Math.floor(s/60)+" min ago"; if(s<86400) return Math.floor(s/3600)+"h ago"; var d=Math.floor(s/86400); return d===1?"yesterday":d<30?d+" days ago":new Date(iso).toLocaleDateString("en-GB",{day:"numeric",month:"short"}); }
+function mkEl(tag,cls,text){ var e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e; }
+
+function trkLogin(){
+  var body=$("#trk-body"); body.innerHTML="";
+  var f=mkEl("form","trk-login");
+  f.appendChild(mkEl("p",null,"This app is private. Enter your password to open it on this device."));
+  var lab=mkEl("label",null,"Password"); lab.setAttribute("for","trk-pw"); f.appendChild(lab);
+  var pw=mkEl("input"); pw.type="password"; pw.id="trk-pw"; pw.autocomplete="current-password"; f.appendChild(pw);
+  var err=mkEl("p","trk-err"); err.hidden=true; f.appendChild(err);
+  var b=mkEl("button","btn dark","Unlock"); b.type="submit"; f.appendChild(b);
+  f.onsubmit=function(e){ e.preventDefault(); if(!pw.value) return; b.disabled=true; err.hidden=true;
+    trkApi({action:"login",password:pw.value}).then(function(d){ b.disabled=false;
+      if(d.token){ trkSave(d.token); trkLoad(); }
+      else { err.textContent=d._status===503?"The tracker isn't set up yet.":(d.error||"Wrong password."); err.hidden=false; pw.select(); }
+    }); };
+  body.appendChild(f); setTimeout(function(){ if(!isMobile()) pw.focus(); },60);
+}
+function trkLoad(){
+  if(!trkTok){ trkLogin(); return; }
+  if(!trkProjects.length){ $("#trk-body").innerHTML='<p class="muted">Loading your projects…</p>'; }
+  trkApi({action:"list"}).then(function(d){
+    if(d._status===401){ trkSave(null); trkLogin(); return; }
+    if(d._status===503){ $("#trk-body").innerHTML='<p class="muted">The tracker isn\'t set up yet on Netlify.</p>'; return; }
+    if(!d.projects){ trkMsg=d.error||"Couldn't load the tracker."; trkRender(); return; }
+    trkProjects=d.projects; trkMsg=""; trkRender();
+  });
+}
+function trkDo(body){
+  trkApi(body).then(function(d){
+    if(d._status===401){ trkSave(null); trkLogin(); return; }
+    if(d.projects){ trkProjects=d.projects; trkMsg=""; } else trkMsg=d.error||"Couldn't save that. Try again.";
+    trkRender();
+  });
+}
+function trkRender(){
+  var body=$("#trk-body"); body.innerHTML="";
+  var act=trkProjects.filter(function(p){ return trkBucket(p)!=="idea"; });
+  var avg=act.length?Math.round(act.reduce(function(a,p){ return a+trkPct(p); },0)/act.length):0;
+  var sum=mkEl("div","trk-sum");
+  [[trkProjects.length,"projects"],[trkProjects.filter(function(p){return trkBucket(p)==="live"}).length,"live"],[trkProjects.filter(function(p){return trkBucket(p)==="build"}).length,"in progress"]].forEach(function(x){ var d=mkEl("div"); d.appendChild(mkEl("b",null,String(x[0]))); d.appendChild(mkEl("span",null,x[1])); sum.appendChild(d); });
+  body.appendChild(sum);
+  var over=mkEl("div","trk-over"); var row=mkEl("div","row"); row.appendChild(mkEl("span",null,"Overall progress")); row.appendChild(mkEl("span",null,avg+"%")); over.appendChild(row);
+  var ob=mkEl("div","trk-bar"); var oi=mkEl("i"); ob.appendChild(oi); over.appendChild(ob);
+  var latest=trkProjects.slice().sort(function(a,b){ return (b.updatedAt||"").localeCompare(a.updatedAt||""); })[0];
+  over.appendChild(mkEl("small",null,latest?"Last update: "+latest.name+", "+trkAgo(latest.updatedAt):"No updates yet"));
+  body.appendChild(over); requestAnimationFrame(function(){ oi.style.width=avg+"%"; });
+  if(trkMsg) body.appendChild(mkEl("p","trk-err",trkMsg));
+  var fl=mkEl("div","trk-filters");
+  [["all","All"],["build","In progress"],["live","Live"],["client","Clients"],["own","My products"],["idea","Ideas"]].forEach(function(f){ var b=mkEl("button",null,f[1]); b.type="button"; b.setAttribute("aria-pressed",trkFilter===f[0]?"true":"false"); b.onclick=function(){ trkFilter=f[0]; trkRender(); }; fl.appendChild(b); });
+  body.appendChild(fl);
+  var list=mkEl("div","trk-list");
+  trkProjects.filter(function(p){ var b=trkBucket(p); return trkFilter==="all"||trkFilter===b||(trkFilter==="client"&&p.kind==="client")||(trkFilter==="own"&&p.kind==="own"); })
+    .sort(function(a,b){ return (b.updatedAt||"").localeCompare(a.updatedAt||"")||(a.name||"").localeCompare(b.name||""); })
+    .forEach(function(p){ list.appendChild(trkCard(p)); });
+  body.appendChild(list);
+  var add=mkEl("form","trk-row"); var ni=mkEl("input"); ni.placeholder="Add a project"; ni.setAttribute("aria-label","New project name"); ni.maxLength=60; add.appendChild(ni);
+  var ab=mkEl("button","btn sm","Add"); ab.type="submit"; add.appendChild(ab);
+  add.onsubmit=function(e){ e.preventDefault(); var n=ni.value.trim(); if(n) trkDo({action:"addProject",name:n,kind:"own"}); };
+  body.appendChild(add);
+  var lo=mkEl("button","btn sm","Lock this device"); lo.type="button"; lo.style.justifySelf="start"; lo.onclick=function(){ trkSave(null); closeWin("tracker"); }; body.appendChild(lo);
+}
+function trkCard(p){
+  var P=trkPct(p), ms=p.milestones||[], done=ms.filter(function(x){return x.done}).length, b=trkBucket(p);
+  var c=mkEl("article","trk-card"); var h=mkEl("button","trk-head"); h.type="button"; h.setAttribute("aria-expanded",trkOpen[p.id]?"true":"false");
+  var top=mkEl("div","trk-top"); top.appendChild(mkEl("strong",null,p.name)); top.appendChild(mkEl("span","trk-chip "+b,p.status||"In progress"));
+  var bump=mkEl("span","bump"); top.appendChild(bump); top.appendChild(mkEl("span","pct",P+"%")); h.appendChild(top);
+  var bar=mkEl("div","trk-bar"); bar.style.marginTop="7px"; var fi=mkEl("i"); bar.appendChild(fi); h.appendChild(bar);
+  var meta=mkEl("div","trk-meta"); meta.appendChild(mkEl("span",null,ms.length?done+" of "+ms.length+" milestones":"No milestones yet")); meta.appendChild(mkEl("span",null,"Updated "+trkAgo(p.updatedAt))); h.appendChild(meta);
+  var lg=(p.log||[])[0]; if(lg) h.appendChild(mkEl("p","trk-last",(lg.by==="Claude"?"Claude: ":"")+lg.note));
+  h.onclick=function(){ trkOpen[p.id]=!trkOpen[p.id]; trkRender(); };
+  c.appendChild(h);
+  var before=trkPrev[p.id]; fi.style.width=(before==null?P:before)+"%";
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ fi.style.width=P+"%"; }); });
+  if(before!=null&&P>before){ c.classList.add("flash"); bump.textContent="+"+(P-before)+"%"; bump.classList.add("on"); setTimeout(function(){ bump.classList.remove("on"); },2400); }
+  trkPrev[p.id]=P;
+  if(trkOpen[p.id]){
+    var d=mkEl("div","trk-det"); d.appendChild(mkEl("h4",null,"Milestones"));
+    var box=mkEl("div","trk-ms");
+    ms.forEach(function(m,i){ var l=mkEl("label",m.done?"done":""); var cb=mkEl("input"); cb.type="checkbox"; cb.checked=!!m.done; cb.onchange=function(){ trkDo({action:"toggle",id:p.id,i:i,done:cb.checked}); }; l.appendChild(cb); l.appendChild(mkEl("span",null,m.t)); box.appendChild(l); });
+    d.appendChild(box);
+    var mf=mkEl("form","trk-row"); var mi=mkEl("input"); mi.placeholder="Add a milestone"; mi.setAttribute("aria-label","New milestone"); mf.appendChild(mi); var mb=mkEl("button","btn sm","Add"); mb.type="submit"; mf.appendChild(mb);
+    mf.onsubmit=function(e){ e.preventDefault(); var t=mi.value.trim(); if(t) trkDo({action:"addMilestone",id:p.id,text:t}); }; d.appendChild(mf);
+    var uf=mkEl("form"); var ta=mkEl("textarea"); ta.placeholder="Log an update, e.g. Sent the demo to the client"; ta.setAttribute("aria-label","Update note"); uf.appendChild(ta);
+    var ub=mkEl("button","btn sm dark","Save update"); ub.type="submit"; ub.style.marginTop="6px"; uf.appendChild(ub);
+    uf.onsubmit=function(e){ e.preventDefault(); var t=ta.value.trim(); if(t) trkDo({action:"log",id:p.id,text:t}); }; d.appendChild(uf);
+    if((p.log||[]).length){ d.appendChild(mkEl("h4",null,"History")); var ul=mkEl("ul","trk-log"); p.log.slice(0,8).forEach(function(l){ var li=mkEl("li",l.by==="Claude"?"claude":""); li.appendChild(mkEl("span",null,l.note)); li.appendChild(mkEl("small",null,(l.by||"You")+" · "+trkAgo(l.at))); ul.appendChild(li); }); d.appendChild(ul); }
+    if(p.url){ var a=mkEl("a",null,"Open "+p.url.replace(/^https?:\/\//,"").replace(/\/$/,"")+" ↗"); a.href=p.url; a.target="_blank"; a.rel="noopener"; a.style.fontWeight="600"; a.style.fontSize=".85rem"; d.appendChild(a); }
+    c.appendChild(d);
+  }
+  return c;
+}
+var _openT=openWin;
+openWin=function(id){ _openT(id); if(id==="tracker"){ trkLoad(); clearInterval(trkTimer); trkTimer=setInterval(function(){ if(win("tracker").classList.contains("open")&&trkTok&&!document.hidden) trkLoad(); },60000); } };
+trkIcons();
+if(location.hash==="#tracker") setTimeout(function(){ openWin("tracker"); },isMobile()?50:2600);
+window.addEventListener("hashchange",function(){ if(location.hash==="#tracker") openWin("tracker"); });
 
 /* ================= boot sequence ================= */
 function boot(force){
